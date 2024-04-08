@@ -4,32 +4,37 @@ import comment from "../assets/icons/tweet/comment.svg";
 import share from "../assets/icons/tweet/share.svg";
 import repost from "../assets/icons/tweet/repost.svg";
 import pfp from "../assets/pfp/pfp1.jpeg";
+import { truncateAddress, calculateTimeDifference } from "../helperFunctions";
 
+interface TweetProps {
+  address: string;
+  timestamp: number; 
+  content: string;
+}
 
-const Tweet = () => {
+const Tweet : React.FC<TweetProps>= ({address, timestamp, content}) => {
+  const userAddress = truncateAddress(address)
+  const postedAt = calculateTimeDifference(timestamp);
 
   return (
     <div className=" border-2 border-neutral-700 rounded-md p-2">
       <div className="flex items-center gap-2">
         <img className="h-10 w-10 rounded-full" src={pfp} />
         <div className="flex items-center gap-2">
-          <p>Sandeep Prajapati</p>
+          <p>{userAddress}</p>
           <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-          <p className="text-neutral-500">@sandeep</p>
-          <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-          <p className="text-neutral-500">Apr 5</p>
+          <p className="text-neutral-500">{postedAt}</p>
         </div>
       </div>
       <p className="mt-4">
-        Description dfas df asd fa sdf asd fas df asdf asd fa sdf asd fas df
-        asdfasd fa sdf asdf a df asd fasd fa sdf asdf asd fadsf asdf a{" "}
+        {content}
       </p>
       <div className="flex mt-4">
-        <img src={like} alt="" className="h-6 w-6" />
-        <img src={bookmark} alt="" className="h-6 w-6" />
-        <img src={comment} alt="" className="h-6 w-6" />
-        <img src={share} alt="" className="h-6 w-6" />
-        <img src={repost} alt="" className="h-6 w-6" />
+        <img src={like} alt="like" className="h-6 w-6" />
+        <img src={bookmark} alt="bookmark" className="h-6 w-6" />
+        <img src={comment} alt="comment" className="h-6 w-6" />
+        <img src={share} alt="share" className="h-6 w-6" />
+        <img src={repost} alt="repost" className="h-6 w-6" />
       </div>
     </div>
   );
