@@ -1,4 +1,3 @@
-import React from "react";
 import like from "../assets/icons/tweet/heart.svg";
 import bookmark from "../assets/icons/tweet/bookmark.svg";
 import comment from "../assets/icons/tweet/comment.svg";
@@ -6,7 +5,9 @@ import share from "../assets/icons/tweet/share.svg";
 import repost from "../assets/icons/tweet/repost.svg";
 import pfp from "../assets/pfp/pfp1.jpeg";
 
+
 const Tweet = () => {
+
   return (
     <div className=" border-2 border-neutral-700 rounded-md p-2">
       <div className="flex items-center gap-2">

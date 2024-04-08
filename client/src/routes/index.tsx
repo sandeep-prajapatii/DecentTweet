@@ -1,19 +1,25 @@
-import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
-import Explore from "../pages/Explore";
-import Notifications from "../pages/Notifications";
-import Messages from "../pages/Messages";
-import Bookmarks from "../pages/Bookmarks";
+import PublicRoutes from "./PublicRoutes";
+import PrivateRoutes from "./PrivateRoutes";
+import LeftSidebar from "../components/LeftSidebar";
+import RightSidebar from "../components/RightSidebar";
+import { useAccount } from "wagmi";
+
 
 const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/explore" element={<Explore />} />
-      <Route path="/notifications" element={<Notifications />} />
-      <Route path="/messages" element={<Messages />} />
-      <Route path="/bookmarks" element={<Bookmarks />} />
-    </Routes>
+  const { isConnected : isLoggedIn } = useAccount()
+
+  return isLoggedIn ? (
+    <>
+      <div className="h-screen flex justify-center   ">
+        <LeftSidebar />
+        <div className="flex-grow max-w-[550px] border border-neutral-700">
+          <PrivateRoutes />
+        </div>
+        <RightSidebar />
+      </div>
+    </>
+  ) : (
+    <PublicRoutes />
   );
 };
 
