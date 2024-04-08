@@ -3,6 +3,7 @@ import CreateTweet from "../components/CreateTweet";
 import Tweet from "../components/Tweet";
 
 const Home = () => {
+
   return (
     <div>
       <div className="w-full">
