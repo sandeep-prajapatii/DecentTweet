@@ -5,6 +5,7 @@ import Explore from "../pages/Explore";
 import Notifications from "../pages/Notifications";
 import Messages from "../pages/Messages";
 import Bookmarks from "../pages/Bookmarks";
+import Profile from "../pages/Profile";
 
 const PrivateRoutes = () => {
   return (
@@ -14,6 +15,7 @@ const PrivateRoutes = () => {
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/messages" element={<Messages />} />
       <Route path="/bookmarks" element={<Bookmarks />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 };

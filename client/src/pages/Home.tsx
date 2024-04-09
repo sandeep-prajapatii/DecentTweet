@@ -33,7 +33,7 @@ const Home = () => {
       </div>
       <CreateTweet />
       <div className="p-2 flex flex-col gap-2">
-        {tweets.map((tweet, index) => (
+        {tweets.slice().reverse().map((tweet, index) => (
           <Tweet
             key={index}
             address={tweet.author}

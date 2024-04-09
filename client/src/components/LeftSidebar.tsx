@@ -6,10 +6,7 @@ import notifications from "../assets/icons/navbar/notification.svg";
 import message from "../assets/icons/navbar/message.svg";
 import bookmark from "../assets/icons/tweet/bookmark.svg";
 import logouticon from "../assets/icons/navbar/logout.svg"
-
-import homeFilled from "../assets/icons/navbar/home-filled.svg";
-import notificationsFilled from "../assets/icons/navbar/notification-filled.svg";
-import bookmarkFilled from "../assets/icons/navbar/bookmark-filled.svg";
+import profile from "../assets/icons/navbar/profile.svg"
 
 import { useAccount, useDisconnect } from "wagmi";
 
@@ -23,6 +20,7 @@ const LeftSidebar = () => {
     { to: "/notifications", label: "Notifications", icon: notifications },
     { to: "/messages", label: "Messages", icon: message },
     { to: "/bookmarks", label: "Bookmarks", icon: bookmark },
+    { to: "/profile", label: "Profile", icon: profile },
   ];
 
   const logout = () => {
@@ -50,7 +48,7 @@ const LeftSidebar = () => {
       ))}
 
       <div className="flex p-2 gap-2 " onClick={logout}>
-        <img className="h-6 w-6 " src={logouticon} alt="logout" />
+        <img className="h-6 w-6 mx-auto lg:mx-0" src={logouticon} alt="logout" />
         <p className="hidden lg:block text-xl ">Logout</p>
       </div>
     </div>
