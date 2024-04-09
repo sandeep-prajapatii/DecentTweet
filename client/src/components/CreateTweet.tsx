@@ -11,7 +11,7 @@ const CreateTweet = () => {
   const tweet = () => {
     writeContract({ 
       abi : DecentTweetAbi,
-      address: "0xf2936B08700c37968b1A2FB0f7B832480147874f",
+      address: "0xd0b4e9222bf56dfffa5d0e7a8f317da5a262c43c",
       functionName: 'createTweet',
       args: [
         tweetContent
