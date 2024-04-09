@@ -1,3 +1,5 @@
+import avatar from "animal-avatar-generator";
+
 export function truncateAddress(input: string): string {
   const truncated = input.substr(0, 5);
   return truncated + "..." + input.substr(input.length - 3);
@@ -32,6 +34,13 @@ export function formatUnixTimestamp(timestamp: number): string {
       return `${differenceInSeconds} ${differenceInSeconds === 1 ? 'second' : 'seconds'} ago`;
     }
   }
+
+  export const GenerateAvatar = ({ userAddress }: { userAddress: string }) => {
+    const svgData = avatar(userAddress, { size: 200 });
+    return (
+      <div id="avatar" dangerouslySetInnerHTML={{ __html: svgData }}></div>
+    )
+  };
   
   
   

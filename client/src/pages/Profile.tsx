@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import defaultImg from "../assets/pfp/default.jpeg";
-
+import { useAccount } from "wagmi";
+import { GenerateAvatar } from "../helperFunctions";
 
 const Profile = () => {
- 
+  const account = useAccount();
+  const userAddress: string = account?.address?.toString() || "";
 
   return (
     <div>
-      <p className='text-xl font-bold text-center p-2 border-b-2 border-neutral-700'>Profile</p>
-      <img src={defaultImg} className='rounded-full max-h-[12em] max-w-[12em] mx-auto mt-4  object-scale-down' alt='pfp' />
-      <p>Name</p>
-      <p>Sandeep Prajapati</p>    
+      <p className="text-xl font-bold text-center p-2 border-b-2 border-neutral-700">
+        Profile
+      </p>
+      <div className="flex justify-center mt-4">
+        {userAddress && <GenerateAvatar userAddress={userAddress} />}
+      </div>
+      <div className="ml-4">
+        <p className="font-semibold text-lg">Name</p>
+        <p>Sandeep Prajapati</p>
+      </div>
     </div>
   );
 };
