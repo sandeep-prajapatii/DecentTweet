@@ -25,7 +25,7 @@ const ForYouFeed = () => {
   }, [result]);
 
   return (
-    <div className="p-2 flex flex-col gap-2">
+    <div className="p-2 flex flex-col gap-2 divide-y divide-neutral-700">
       {tweets
         .slice()
         .reverse()

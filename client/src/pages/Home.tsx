@@ -2,6 +2,7 @@ import CreateTweet from "../components/CreateTweet";
 import ForYouFeed from "../components/ForYouFeed";
 import FollowingFeed from "../components/FollowingFeed";
 import { useState } from "react";
+import CommentModal from "../components/CommentModal";
 
 const Home = () => {
   const [selectedTab, setSelectedTab] = useState("foryou");
@@ -27,6 +28,8 @@ const Home = () => {
         </button>
       </div>
       <CreateTweet />
+
+      {/* <CommentModal /> */}
 
       {selectedTab == "foryou" ? <ForYouFeed /> : <FollowingFeed />}
     </div>

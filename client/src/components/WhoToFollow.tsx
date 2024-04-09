@@ -4,7 +4,7 @@ import pfp2 from "../assets/pfp/pfp2.jpeg";
 
 const WhoToFollow = () => {
   return (
-    <div className="px-2 pt-4">
+    <div className="border-2 rounded-md border-neutral-700 p-2">
       <p className="text-xl font-semibold mb-4">Who to follow</p>
       <div className="flex flex-col gap-4">
 

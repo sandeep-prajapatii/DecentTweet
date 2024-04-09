@@ -27,7 +27,7 @@ const CreateTweet = () => {
         <div className="flex gap-2 mt-2">
           <img src={image} className="h-6" alt="image" />
           <img src={gif} className="h-6" alt="gif" />
-          <img src={emoji} className="h-6 rotate-[15deg]" alt="emoji" />
+          <img src={emoji} className="h-6" alt="emoji" />
         </div>
 
         <button className="bg-white rounded text-black px-4 py-1 font-semibold" onClick={() => tweet()}>Post</button>

@@ -9,6 +9,7 @@ import profile from "../assets/icons/navbar/profile.svg";
 import { useAccount, useDisconnect } from "wagmi";
 import { GenerateAvatar, truncateAddress } from "../helperFunctions";
 import { useState } from "react";
+import PostModal from "./PostModal";
 
 const LeftSidebar = () => {
   const account = useAccount();
@@ -19,9 +20,14 @@ const LeftSidebar = () => {
   const { disconnect } = useDisconnect();
 
   const [showLogout, setShowLogout] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
 
   const handleShowLogout = () => {
     setShowLogout(!showLogout);
+  };
+
+  const onClose = () => {
+    setShowPostModal(false);
   };
 
   const links = [
@@ -59,7 +65,10 @@ const LeftSidebar = () => {
             ))}
           </div>
 
-          <button className="bg-white w-full p-2 text-xl rounded-md font-semibold text-black mt-2">
+          <button
+            onClick={() => setShowPostModal(true)}
+            className="bg-white w-full p-2 text-xl rounded-md font-semibold text-black mt-2"
+          >
             Post
           </button>
         </div>
@@ -101,6 +110,7 @@ const LeftSidebar = () => {
           </div>
         </div>
       </div>
+      {showPostModal && <PostModal onClose={onClose} />}
     </div>
   );
 };
