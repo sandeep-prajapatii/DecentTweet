@@ -4,15 +4,14 @@
 
 .scrollbar::-webkit-scrollbar-track
 {
-	background-color: transparent;
-  border-radius: 10px;
+  visibility: hidden;
 }
 .scrollbar::-webkit-scrollbar
 {
-	width: 10px;
+	width: 0px;
+	visibility: hidden;
 }
 .scrollbar::-webkit-scrollbar-thumb
 {
-	background-color: #404040;	
-  border-radius: 10px;
+	visibility: hidden;
 }

@@ -10,7 +10,7 @@ const AppRoutes = () => {
 
   return isLoggedIn ? (
     <>
-      <div className="h-screen flex justify-center   ">
+      <div className="h-screen flex justify-center overflow-hidden   ">
         <LeftSidebar />
         <div className="flex-grow max-w-[550px] border border-neutral-700 min-h-screen overflow-auto scrollbar">
           <PrivateRoutes />

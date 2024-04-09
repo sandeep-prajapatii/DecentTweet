@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
 
 const Bookmarks = () => {
   return (
-    <div>Bookmarks</div>
-  )
-}
+    <div>
+      <p className="text-xl font-bold text-center p-2 border-b-2 border-neutral-700">
+        Bookmarks
+      </p>
+    </div>
+  );
+};
 
-export default Bookmarks
+export default Bookmarks;

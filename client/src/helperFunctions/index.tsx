@@ -35,11 +35,15 @@ export function formatUnixTimestamp(timestamp: number): string {
     }
   }
 
-  export const GenerateAvatar = ({ userAddress }: { userAddress: string }) => {
-    const svgData = avatar(userAddress, { size: 200 });
+  interface GenerateAvatarProps {
+    userAddress: string;
+    size: number;
+  }
+  export const GenerateAvatar: React.FC<GenerateAvatarProps> = ({ userAddress, size }) => {
+    const svgData = avatar(userAddress, { size });
     return (
       <div id="avatar" dangerouslySetInnerHTML={{ __html: svgData }}></div>
-    )
+    );
   };
   
   

@@ -11,12 +11,17 @@ const Profile = () => {
         Profile
       </p>
       <div className="flex justify-center mt-4">
-        {userAddress && <GenerateAvatar userAddress={userAddress} />}
+        {userAddress && <GenerateAvatar userAddress={userAddress} size={150}/>}
       </div>
       <div className="ml-4">
         <p className="font-semibold text-lg">Name</p>
         <p>Sandeep Prajapati</p>
       </div>
+      <div className="ml-4">
+        <p className="font-semibold text-lg">Your Address</p>
+        <p>{userAddress}</p>
+      </div>
+      
     </div>
   );
 };

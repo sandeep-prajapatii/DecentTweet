@@ -1,47 +1,34 @@
-import React, { useEffect, useState } from "react";
 import CreateTweet from "../components/CreateTweet";
-import Tweet from "../components/Tweet";
-import { useReadContract } from "wagmi";
-import { DecentTweetAbi } from "../contract/DecentTweetABI";
-
-interface TweetData {
-  author: string;
-  timestamp: bigint;
-  text: string;
-}
+import ForYouFeed from "../components/ForYouFeed";
+import FollowingFeed from "../components/FollowingFeed";
+import { useState } from "react";
 
 const Home = () => {
-  const [tweets, setTweets] = useState<TweetData[]>([]);
-  const result = useReadContract({
-    abi: DecentTweetAbi,
-    address: "0xf2936B08700c37968b1A2FB0f7B832480147874f",
-    functionName: "getAllTweets",
-  });
-
-  useEffect(() => {
-    if (result?.data && Array.isArray(result.data)) {
-      const tweetData: TweetData[] = result.data;
-      setTweets(tweetData);
-    }
-  }, [result]);
+  const [selectedTab, setSelectedTab] = useState("foryou");
 
   return (
     <div>
-      <div className="w-full">
-        <button className="w-1/2 p-2">For you</button>
-        <button className="w-1/2 p-2">Following</button>
+      <div className="w-full divide-x-2">
+        <button
+          onClick={() => {
+            setSelectedTab("foryou");
+          }}
+          className={`w-1/2 text-xl font-semibold text-center p-2 border-b-2 border-neutral-700 ${selectedTab == "foryou" && "border-b-4"}`}
+        >
+          For you
+        </button>
+        <button
+          onClick={() => {
+            setSelectedTab("following");
+          }}  
+          className={`w-1/2 text-xl font-semibold text-center p-2 border-b-2 border-neutral-700 ${selectedTab == "following" && "border-b-4"}`}
+        >
+          Following
+        </button>
       </div>
       <CreateTweet />
-      <div className="p-2 flex flex-col gap-2">
-        {tweets.slice().reverse().map((tweet, index) => (
-          <Tweet
-            key={index}
-            address={tweet.author}
-            timestamp={Number(tweet.timestamp)}
-            content={tweet.text}
-          />
-        ))}
-      </div>
+
+      {selectedTab == "foryou" ? <ForYouFeed /> : <FollowingFeed />}
     </div>
   );
 };
