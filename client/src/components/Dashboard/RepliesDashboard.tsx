@@ -1,12 +1,12 @@
-import React from 'react'
-import ForYouFeed from '../ForYouFeed'
+import React from "react";
+import ForYouFeed from "../Feed/ForYouFeed";
 
 const RepliesDashboard = () => {
   return (
     <div>
-        <ForYouFeed/>
+      <ForYouFeed />
     </div>
-  )
-}
+  );
+};
 
-export default RepliesDashboard
+export default RepliesDashboard;

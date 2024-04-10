@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Tweet from "../components/Tweet";
+import Tweet from "../Tweet";
 import { useReadContract } from "wagmi";
-import { DecentTweetAbi } from "../contract/DecentTweetABI";
+import { DecentTweetAbi } from "../../contract/DecentTweetABI";
 import { useAccount } from "wagmi";
 
 interface TweetData {
   author: string;
   timestamp: bigint;
   tweetMsg: string;
-  tweetIndex: number
-  likes: string[]
-  replyIndices: number[]
+  tweetIndex: number;
+  likes: string[];
+  replyIndices: number[];
 }
 
 const ForYouFeed = () => {
@@ -24,7 +24,7 @@ const ForYouFeed = () => {
     functionName: "getAllTweets",
   });
 
-  console.log(result)
+  console.log(result);
 
   useEffect(() => {
     if (result?.data && Array.isArray(result.data)) {
@@ -45,9 +45,9 @@ const ForYouFeed = () => {
             address={tweet.author}
             timestamp={Number(tweet.timestamp)}
             content={tweet.tweetMsg}
-            currentUserAddress = {userAddress}
-            likes = {tweet.likes.length}
-            replyIndices = {tweet.replyIndices.length}
+            currentUserAddress={userAddress}
+            likes={tweet.likes.length}
+            replyIndices={tweet.replyIndices.length}
           />
         ))}
     </div>

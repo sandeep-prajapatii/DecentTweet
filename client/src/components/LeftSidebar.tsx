@@ -9,7 +9,7 @@ import profile from "../assets/icons/navbar/profile.svg";
 import { useAccount, useDisconnect } from "wagmi";
 import { GenerateAvatar, truncateAddress } from "../helperFunctions";
 import { useState } from "react";
-import PostModal from "./PostModal";
+import PostModal from "./Modals/PostModal";
 
 const LeftSidebar = () => {
   const account = useAccount();

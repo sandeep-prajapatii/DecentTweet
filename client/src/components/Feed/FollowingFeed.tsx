@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Tweet from "../components/Tweet";
+import Tweet from "../Tweet";
 import { useReadContract } from "wagmi";
-import { DecentTweetAbi } from "../contract/DecentTweetABI";
+import { DecentTweetAbi } from "../../contract/DecentTweetABI";
 
 interface TweetData {
   author: string;
@@ -17,7 +17,7 @@ const FollowingFeed = () => {
     functionName: "getAllTweets",
   });
 
-  // just change the api here it will work fine 
+  // just change the api here it will work fine
 
   useEffect(() => {
     if (result?.data && Array.isArray(result.data)) {
@@ -28,7 +28,7 @@ const FollowingFeed = () => {
 
   return (
     <div className="p-2 flex flex-col gap-2">
-    {/* {tweets.slice().reverse().map((tweet, index) => (
+      {/* {tweets.slice().reverse().map((tweet, index) => (
       <Tweet
         key={index}
         address={tweet.author}
@@ -36,9 +36,11 @@ const FollowingFeed = () => {
         content={tweet.text}
       />
     ))} */}
-    <p className="text-xl font-semibold text-center mt-6">Your followers haven't posted yet :( </p>
-  </div>
-  )
-}
+      <p className="text-xl font-semibold text-center mt-6">
+        Your followers haven't posted yet :({" "}
+      </p>
+    </div>
+  );
+};
 
-export default FollowingFeed
+export default FollowingFeed;

@@ -1,7 +1,6 @@
 import React from "react";
-import cross from "../assets/cross.svg";
-import pfp from "../assets/pfp/default.jpeg";
-import pfp2 from "../assets/pfp/pfp1.jpeg";
+import cross from "../../assets/cross.svg";
+import pfp from "../../assets/pfp/default.jpeg";
 
 type PostModalProps = {
   onClose: () => void;

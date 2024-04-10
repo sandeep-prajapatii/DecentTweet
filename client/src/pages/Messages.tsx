@@ -12,12 +12,12 @@ const Messages = () => {
       <div className="px-2">
         <Search />
       </div>
-      {/* <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <MessageLog />
         <MessageLog />
         <MessageLog />
-      </div> */}
-      <PersonalMessage />
+      </div>
+      {/* <PersonalMessage /> */}
     </div>
   );
 };

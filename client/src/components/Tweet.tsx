@@ -6,14 +6,14 @@ import repost from "../assets/icons/tweet/repost.svg";
 import likePink from "../assets/icons/tweet/heartPink.svg";
 import repostGreen from "../assets/icons/tweet/repostGreen.svg";
 import bookmarkFilled from "../assets/icons/tweet/bookmark-filled.svg";
-import { useWriteContract, useReadContract } from 'wagmi'
+import { useWriteContract, useReadContract } from "wagmi";
 import {
   truncateAddress,
   calculateTimeDifference,
   GenerateAvatar,
 } from "../helperFunctions";
 import { useState } from "react";
-import CommentModal from "./CommentModal";
+import CommentModal from "./Modals/CommentModal";
 import { DecentTweetAbi } from "../contract/DecentTweetABI";
 
 interface TweetProps {
@@ -22,12 +22,20 @@ interface TweetProps {
   content: string;
   index: number;
   currentUserAddress: string;
-  likes: number
-  replyIndices: number
+  likes: number;
+  replyIndices: number;
 }
 
-const Tweet: React.FC<TweetProps> = ({ address, timestamp, content, index, currentUserAddress, likes, replyIndices }) => {
-  const { writeContract } = useWriteContract()
+const Tweet: React.FC<TweetProps> = ({
+  address,
+  timestamp,
+  content,
+  index,
+  currentUserAddress,
+  likes,
+  replyIndices,
+}) => {
+  const { writeContract } = useWriteContract();
   const userAddress = truncateAddress(address);
   const postedAt = calculateTimeDifference(timestamp);
 
@@ -38,23 +46,21 @@ const Tweet: React.FC<TweetProps> = ({ address, timestamp, content, index, curre
 
   const onClose = () => {
     setOpenComment(false);
-  }
+  };
 
-  const tweetIndexInNumber = Number(index)
+  const tweetIndexInNumber = Number(index);
 
   const handleLike = () => {
-    writeContract({ 
-      abi : DecentTweetAbi,
+    writeContract({
+      abi: DecentTweetAbi,
       address: "0xd0b4e9222bf56dfffa5d0e7a8f317da5a262c43c",
-      functionName: 'likeTweet',
-      args: [
-        tweetIndexInNumber
-      ],
-    })
+      functionName: "likeTweet",
+      args: [tweetIndexInNumber],
+    });
     setLiked(true);
-  }
+  };
   // const handleComment = () => {
-  //   writeContract({ 
+  //   writeContract({
   //     abi : DecentTweetAbi,
   //     address: "0xd0b4e9222bf56dfffa5d0e7a8f317da5a262c43c",
   //     functionName: 'commentOnTweet',
@@ -71,7 +77,7 @@ const Tweet: React.FC<TweetProps> = ({ address, timestamp, content, index, curre
   //   address: "0xd0b4e9222bf56dfffa5d0e7a8f317da5a262c43c",
   //   functionName: "getLikedPosts",
   //   args: [
-  //     userAddress 
+  //     userAddress
   //   ],
   // });
   // console.log("liked ", likedByUser)
@@ -88,10 +94,15 @@ const Tweet: React.FC<TweetProps> = ({ address, timestamp, content, index, curre
           <p className="text-neutral-500">{postedAt}</p>
         </div>
       </div>
-      <p className="mt-4">{content} index {tweetIndexInNumber}</p>
+      <p className="mt-4">
+        {content} index {tweetIndexInNumber}
+      </p>
 
       <div className="flex justify-evenly mt-4 pt-2 border-neutral-700 text-neutral-400">
-        <div onClick={()=>handleLike()} className="flex items-center gap-1 text-sm">
+        <div
+          onClick={() => handleLike()}
+          className="flex items-center gap-1 text-sm"
+        >
           <img src={liked ? likePink : like} alt="like" className="h-6 w-6" />
           <p className={liked ? "text-[#f91880]" : " "}>{likes}</p>
         </div>
@@ -104,7 +115,7 @@ const Tweet: React.FC<TweetProps> = ({ address, timestamp, content, index, curre
             alt="comment"
             className="h-6 w-6"
           />
-          <p>{replyIndices  }</p>
+          <p>{replyIndices}</p>
         </div>
         <div className="flex items-center gap-1 text-sm">
           <img
