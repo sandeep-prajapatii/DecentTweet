@@ -26,23 +26,22 @@ const CommentModal = ({onClose}: CommentModalProps) => {
 
           <div className="flex flex-col ">
             <div className="flex  gap-2 items-center">
-              <p>Sandeep Prajapati</p>
+              <p>aman</p>
               <div className="h-1 w-1 bg-neutral-300 rounded-full"></div>
-              <p className="text-neutral-500">@sandeep</p>
+              <p className="text-neutral-500">0x7gh...74e</p>
               <div className="h-1 w-1 bg-neutral-300 rounded-full"></div>
               <p className="text-neutral-500">11h ago</p>
             </div>
 
             <div className="mt-2 ">
               <p>
-                Hello this side sandeep prajapati how are yhou my fnoed dandfdf
-                adfd fa df d fasd f df adf asd fa sdf
+              Anyone heard today's new ??
               </p>
             </div>
 
             <p className="mt-4 text-neutral-500">
               Replying to
-              <span className="text-white"> @Sandeep</span>
+              <span className="text-white"> @aman</span>
             </p>
           </div>
         </div>

@@ -3,10 +3,13 @@ import PrivateRoutes from "./PrivateRoutes";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import { useAccount } from "wagmi";
-
+import PersonalMessage from "../components/Messages/PersonalMessage";
+import { useLocation } from "react-router-dom";
 
 const AppRoutes = () => {
-  const { isConnected : isLoggedIn } = useAccount()
+  const { isConnected: isLoggedIn } = useAccount();
+  const location = useLocation();
+  const currentLocation = location.pathname;
 
   return isLoggedIn ? (
     <>
@@ -15,7 +18,11 @@ const AppRoutes = () => {
         <div className="flex-grow max-w-[550px] border border-neutral-700 min-h-screen overflow-auto scrollbar">
           <PrivateRoutes />
         </div>
-        <RightSidebar />
+        {currentLocation === "/personal-msg" ? (
+          <PersonalMessage />
+        ) : (
+          <RightSidebar />
+        )}
       </div>
     </>
   ) : (

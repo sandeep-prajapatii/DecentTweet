@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import home from "../assets/icons/navbar/home.svg";
 import message from "../assets/icons/navbar/message.svg";
-import bookmark from "../assets/icons/tweet/bookmark.svg";
+import bookmarkWhite from "../assets/icons/tweet/bookmark-white.svg";
 import logouticon from "../assets/icons/navbar/logout.svg";
 import profile from "../assets/icons/navbar/profile.svg";
 
@@ -33,7 +33,7 @@ const LeftSidebar = () => {
   const links = [
     { to: "/", label: "Home", icon: home },
     { to: "/messages", label: "Messages", icon: message },
-    { to: "/bookmarks", label: "Bookmarks", icon: bookmark },
+    { to: "/bookmarks", label: "Bookmarks", icon: bookmarkWhite },
     { to: "/profile", label: "Profile", icon: profile },
   ];
 
@@ -46,7 +46,7 @@ const LeftSidebar = () => {
     <div className="h-screen min-w-[80px] lg:min-w-[200px] pr-2">
       <div className="h-screen flex flex-col justify-between">
         <div>
-          <p className="p-2 my-4 text-xl text-center font-semibold">LOGO</p>
+          <p className="p-2 my-4 text-xl text-center font-semibold">DT</p>
 
           <div className="flex flex-col gap-2">
             {links.map((link) => (
@@ -91,7 +91,7 @@ const LeftSidebar = () => {
           >
             <GenerateAvatar userAddress={userAddress} size={40} />
             <div className="flex-grow lg:block hidden">
-              <p className="font-semibold">username</p>
+              <p className="font-semibold">shaktiii</p>
               <div className="flex">
                 <p className="text-sm flex-grow">{shortUserAddress}</p>
                 <div className="flex gap-[3px] px-1 items-center">

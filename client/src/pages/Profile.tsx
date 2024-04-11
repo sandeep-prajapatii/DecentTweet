@@ -25,11 +25,16 @@ const Profile = () => {
       </div>
 
       <div className="mx-4 mt-4">
-        <p className="text-xl font-bold">Sandeep Prajapati</p>
+        <div className="flex">
+        <p className="text-xl font-bold flex-grow">shaktiii</p>
+        <button className="bg-white text-black font-semibold p-1 px-3 rounded-md">
+        Follow
+      </button>
+
+        </div>
         <p className="text-neutral-400 ">{userAddress}</p>
         <p className="mt-4">
-          Hello my name is sandeep prajapati and this is my bio okay bitch fa
-          sdfa dfa sdf asd fa sdf as fas df a f fuck u
+          Co-Founder @getWalletX || Changing the world, one frontend at a time.
         </p>
       </div>
 
@@ -38,23 +43,39 @@ const Profile = () => {
           <span className="text-white font-semibold">84</span> Followers
         </p>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">84</span> Following
+          <span className="text-white font-semibold">54</span> Following
         </p>
       </div>
-      <button className="bg-white text-black font-semibold p-1 px-3 rounded-md mt-4 mx-auto block">
-        Follow
-      </button>
+
 
       <div className="mt-4 flex flex-col flex-grow">
         <div className="flex  border-b border-neutral-700">
           <div className="w-full" onClick={() => setSelectedTab("Post")}>
-            <button className={`mx-auto block px-4 py-2 ${selectedTab === "Post" && "border-b-4"}`}>Post</button>
+            <button
+              className={`mx-auto block px-4 py-2 ${
+                selectedTab === "Post" && "border-b-4"
+              }`}
+            >
+              Post
+            </button>
           </div>
           <div className="w-full" onClick={() => setSelectedTab("Replies")}>
-            <button className={`mx-auto block px-4 py-2 ${selectedTab === "Replies" && "border-b-4"}`}>Replies</button>
+            <button
+              className={`mx-auto block px-4 py-2 ${
+                selectedTab === "Replies" && "border-b-4"
+              }`}
+            >
+              Replies
+            </button>
           </div>
           <div className="w-full" onClick={() => setSelectedTab("Likes")}>
-            <button className={`mx-auto block px-4 py-2 ${selectedTab === "Likes" && "border-b-4"}`}>Likes</button>
+            <button
+              className={`mx-auto block px-4 py-2 ${
+                selectedTab === "Likes" && "border-b-4"
+              }`}
+            >
+              Likes
+            </button>
           </div>
         </div>
         <div className="flex-grow ">
