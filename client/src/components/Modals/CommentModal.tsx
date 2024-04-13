@@ -1,28 +1,30 @@
-import React from "react";
 import cross from "../../assets/cross.svg";
 import pfp from "../../assets/pfp/default.jpeg";
 import pfp2 from "../../assets/pfp/pfp1.jpeg";
 
 type CommentModalProps = {
-    onClose : ()=>void
-}
+  isOpen: boolean;
+  onClose: () => void;
+};
 
-const CommentModal = ({onClose}: CommentModalProps) => {
-    
+const CommentModal = ({ isOpen, onClose }: CommentModalProps) => {
   return (
-    <div onClick={onClose} className="flex justify-center  h-screen w-screen absolute top-0 left-0 bg-white bg-opacity-20">
-      <div onClick={(event)=>event.stopPropagation()} className="bg-neutral-900 md:mt-12 mt-0  p-4 md:rounded-md rounded-none md:w-[550px] w-full h-full md:h-fit">
-        <button onClick={()=>onClose()}>
-            <img className="h-8 w-8" src={cross} alt="close" />
+    <div
+      onClick={onClose}
+      className={` ${
+        isOpen === false && "hidden"
+      } flex justify-center  h-screen w-screen absolute top-0 left-0 bg-white bg-opacity-20`}
+    >
+      <div
+        onClick={(event) => event.stopPropagation()}
+        className="bg-neutral-900 md:mt-12 mt-0  p-4 md:rounded-md rounded-none md:w-[550px] w-full h-full md:h-fit"
+      >
+        <button onClick={() => onClose()}>
+          <img className="h-8 w-8" src={cross} alt="close" />
         </button>
 
         <div className="mt-4  flex h-full">
-            <img
-              className="h-10 w-10 mx-2 rounded-full"
-              src={pfp}
-              alt="pfp"
-            />
-
+          <img className="h-10 w-10 mx-2 rounded-full" src={pfp} alt="pfp" />
 
           <div className="flex flex-col ">
             <div className="flex  gap-2 items-center">
@@ -34,9 +36,7 @@ const CommentModal = ({onClose}: CommentModalProps) => {
             </div>
 
             <div className="mt-2 ">
-              <p>
-              Anyone heard today's new ??
-              </p>
+              <p>Anyone heard today's new ??</p>
             </div>
 
             <p className="mt-4 text-neutral-500">
@@ -54,8 +54,10 @@ const CommentModal = ({onClose}: CommentModalProps) => {
         </div>
 
         <div className="flex justify-end w-full mt-4">
-
-        <button className="bg-white text-black px-4 p-1 font-semibold rounded-md"> Reply </  button>
+          <button className="bg-white text-black px-4 p-1 font-semibold rounded-md">
+            {" "}
+            Reply{" "}
+          </button>
         </div>
       </div>
     </div>

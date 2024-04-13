@@ -1,4 +1,3 @@
-import React from "react";
 import { GenerateAvatar, truncateAddress } from "../../helperFunctions";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +12,7 @@ const MessageLog: React.FC<MessageLogProps> = ({
   username,
   address,
   timestamp,
-  content
+  content,
 }) => {
   const shortUserAddress = truncateAddress(address);
   const navigate = useNavigate();
@@ -37,9 +36,7 @@ const MessageLog: React.FC<MessageLogProps> = ({
           <p className="text-neutral-500 text-sm">{timestamp}</p>
         </div>
         <div>
-          <p className="h-6 overflow-hidden">
-            {content}
-          </p>
+          <p className="h-6 overflow-hidden">{content}</p>
         </div>
       </div>
     </div>

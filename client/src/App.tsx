@@ -8,7 +8,6 @@ import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { sepolia } from "wagmi/chains";
 
-
 function App() {
   const queryClient = new QueryClient();
   const projectId = "059d29bfa2ee86b9a3d8a530c0c6d369";
@@ -20,7 +19,7 @@ function App() {
     icons: ["https://avatars.githubusercontent.com/u/37784886"],
   };
 
-  const chains = [ sepolia] as const;
+  const chains = [sepolia] as const;
   const config = defaultWagmiConfig({
     chains,
     projectId,
@@ -37,7 +36,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <div className="h-screen w-screen bg-neutral-900 text-white">
-          <AppRoutes />
+            <AppRoutes />
           </div>
         </Router>
       </QueryClientProvider>

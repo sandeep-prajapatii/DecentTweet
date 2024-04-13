@@ -1,4 +1,3 @@
-import React from "react";
 import cross from "../../assets/cross.svg";
 import pfp from "../../assets/pfp/default.jpeg";
 
@@ -28,11 +27,11 @@ const PostModal = ({ onClose }: PostModalProps) => {
           />
         </div>
 
-          <div className="flex justify-end w-full mt-4">
-            <button className="bg-white text-black px-4 p-1 font-semibold rounded-md">
-              Reply
-            </button>
-          </div>
+        <div className="flex justify-end w-full mt-4">
+          <button className="bg-white text-black px-4 p-1 font-semibold rounded-md">
+            Reply
+          </button>
+        </div>
       </div>
     </div>
   );

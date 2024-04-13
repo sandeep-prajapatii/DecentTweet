@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Tweet from "../Tweet";
 import { useReadContract } from "wagmi";
 import { DecentTweetAbi } from "../../contract/DecentTweetABI";
