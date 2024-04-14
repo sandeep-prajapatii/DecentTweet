@@ -41,7 +41,7 @@ const Tweets = ({ tweetData, tweetIndices }: TweetsProp) => {
     <>
       {tweetIndices && tweetIndices.length > 0 ? (
         <>
-          <div className="divide-y divide-opacity-80 divide-neutral-700">
+          <div className="divide-y-2 divide-opacity-80 divide-neutral-700">
             {tweetsArray.map((tweet) => {
               return (
                 <>
@@ -67,7 +67,7 @@ const Tweets = ({ tweetData, tweetIndices }: TweetsProp) => {
         </>
       ) : (
         <>
-          <div className="divide-y-2">
+          <div className="divide-y-2 divide-opacity-80 divide-neutral-700">
             {tweetData.map((tweet) => {
               return (
                 <>
