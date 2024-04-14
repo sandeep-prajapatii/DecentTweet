@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { UserDetailsDefaultValues, UserDetailsType } from "../utils/helper";
 import { useParams, useNavigate } from "react-router-dom";
+import EditProfileModal from "../components/Modals/EditProfileModal";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,6 +29,11 @@ const Profile = () => {
   );
 
   const [selectedTab, setSelectedTab] = useState("Post");
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  const onClose = () => {
+    setOpenEditModal(false);
+  }
 
   const DTAAA = {
     address: address as `0x${string}`,
@@ -117,7 +123,7 @@ const Profile = () => {
             {userDetails.userName === "" ? "userName" : userDetails.userName}
           </p>
           {currentUserAddress === userAddress ? (
-            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md">
+            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md" onClick={()=>setOpenEditModal(true)}>
               Edit
             </button>
           ) : (
@@ -211,6 +217,7 @@ const Profile = () => {
             <LikesDashboard tweetIndices={userDetails.likes} />
           )}
         </div>
+        <EditProfileModal isOpen={openEditModal} onClose={onClose}/>
       </div>
     </div>
   );
