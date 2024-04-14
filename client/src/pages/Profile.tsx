@@ -3,7 +3,7 @@ import {
   useReadContracts,
   useWriteContract,
 } from "wagmi";
-import { GenerateAvatar } from "../helperFunctions";
+import { GenerateAvatar, generateUsername } from "../helperFunctions";
 import PostDashboard from "../components/Dashboard/PostDashboard";
 import RepliesDashboard from "../components/Dashboard/RepliesDashboard";
 import LikesDashboard from "../components/Dashboard/LikesDashboard";
@@ -30,6 +30,9 @@ const Profile = () => {
 
   const [selectedTab, setSelectedTab] = useState("Post");
   const [openEditModal, setOpenEditModal] = useState(false);
+
+  const temp: string = generateUsername(address)
+  console.log("username", temp)
 
   const onClose = () => {
     setOpenEditModal(false);
@@ -163,13 +166,13 @@ const Profile = () => {
 
       <div className="flex mx-4 mt-4 gap-4" onClick={() => navigate(`/profile/connections`)}>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold mr-1">
             {userDetails.followers.length}
           </span>
           Followers
         </p>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold mr-1">
             {userDetails.following.length}
           </span>
           Following
