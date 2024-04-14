@@ -13,9 +13,10 @@ import {
 } from "../contract/DecentTweetABI";
 import { useEffect, useState } from "react";
 import { UserDetailsDefaultValues, UserDetailsType } from "../utils/helper";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { userAddress } = useParams();
   const [userDetails, setUserDetails] = useState<UserDetailsType>(
     UserDetailsDefaultValues
@@ -154,17 +155,17 @@ const Profile = () => {
         </p>
       </div>
 
-      <div className="flex mx-4 mt-4 gap-4">
+      <div className="flex mx-4 mt-4 gap-4" onClick={() => navigate(`/profile/connections`)}>
         <p className="text-neutral-400 ">
           <span className="text-white font-semibold">
             {userDetails.followers.length}
-          </span>{" "}
+          </span>
           Followers
         </p>
         <p className="text-neutral-400 ">
           <span className="text-white font-semibold">
             {userDetails.following.length}
-          </span>{" "}
+          </span>
           Following
         </p>
       </div>

@@ -6,6 +6,7 @@ import Messages from "../pages/Messages";
 import Bookmarks from "../pages/Bookmarks";
 import Profile from "../pages/Profile";
 import TweetPage from "../pages/TweetPage";
+import Connections from "../pages/Connections";
 
 const PrivateRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const PrivateRoutes = () => {
       <Route path="/bookmarks" element={<Bookmarks />} />
       <Route path="/profile/:userAddress" element={<Profile />} />
       <Route path="/tweet/:tweetIndex" element={<TweetPage />} />
+      <Route path="/profile/connections" element={<Connections />} />
     </Routes>
   );
 };
