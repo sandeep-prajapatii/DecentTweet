@@ -18,15 +18,17 @@ const LeftSidebar = () => {
   const { disconnect } = useDisconnect();
 
   const [showLogout, setShowLogout] = useState(false);
-  const [showPostModal, setShowPostModal] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
   const handleShowLogout = () => {
     setShowLogout(!showLogout);
   };
 
   const onClose = () => {
-    setShowPostModal(false);
+    setIsPostModalOpen(false);
   };
+
+  
 
   const links = [
     { to: "/", label: "Home", icon: home },
@@ -64,7 +66,7 @@ const LeftSidebar = () => {
           </div>
 
           <button
-            onClick={() => setShowPostModal(true)}
+            onClick={() => setIsPostModalOpen(true)}
             className="bg-white w-full p-2 text-xl rounded-md font-semibold text-black mt-2"
           >
             Post
@@ -110,7 +112,7 @@ const LeftSidebar = () => {
           </div>
         </div>
       </div>
-      {showPostModal && <PostModal onClose={onClose} />}
+      <PostModal onClose={onClose} isOpen={isPostModalOpen} />
     </div>
   );
 };
