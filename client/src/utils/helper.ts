@@ -18,13 +18,14 @@ export type TweetData = {
   tweetIndex: number;
   tweetMsg: string;
   tweetType: TweetType;
+  repliedTweetIndex: number;
 };
 
 export const TweetDataDefaultValue: TweetData = {
   authorAddress: "",
   authorName: "",
   likedBy: [],
-  bookmarks:[],
+  bookmarks: [],
   quotedTweetIndex: 0,
   quotes: [],
   replies: [],
@@ -33,6 +34,7 @@ export const TweetDataDefaultValue: TweetData = {
   tweetIndex: 0,
   tweetMsg: "",
   tweetType: TweetType.TWEET,
+  repliedTweetIndex: 0,
 };
 
 export type QuotedTweetData = {
@@ -77,7 +79,7 @@ export type UserDetailsType = {
   following: `0x${string}`[];
 };
 
-export const UserDetailsDefaultValues:UserDetailsType = {
+export const UserDetailsDefaultValues: UserDetailsType = {
   userAddress: `0x`,
   userName: "",
   userBio: "",
@@ -87,4 +89,19 @@ export const UserDetailsDefaultValues:UserDetailsType = {
   replies: [],
   followers: [],
   following: [],
+};
+
+export type RetweetType = {
+  originalTweet: number; // index of th original tweet. quoted tweet index me hi hai variable.
+  retweetedBy: string;
+};
+
+export type QuoteType = {
+  originalTweet: number;
+  quotedTweet: number; // it is the current tweet
+};
+
+export type ReplyType = {
+  originalTweet: number;
+  replyTweet: number; // it is the current tweet
 };

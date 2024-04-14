@@ -4,9 +4,10 @@ import repostWhite from "../assets/icons/tweet/repost-white.svg";
 type RepostModalProps = {
   isOpen: boolean;
   onClose: () => void; // use it when quoting and repost when calling the function.
+  retweet: () => void;
 };
 
-const RepostModal = ({ isOpen }: RepostModalProps) => {
+const RepostModal = ({ isOpen, retweet }: RepostModalProps) => {
   return (
     <div
       className={` ${
@@ -17,7 +18,10 @@ const RepostModal = ({ isOpen }: RepostModalProps) => {
         <img src={pen} alt="Quote" className="h-4 w-4" />
         Quote
       </button>
-      <button className="p-2 px-3 flex items-center gap-1">
+      <button
+        onClick={() => retweet()}
+        className="p-2 px-3 flex items-center gap-1"
+      >
         <img src={repostWhite} alt="Repost" className="h-5 w-5" />
         Repost
       </button>

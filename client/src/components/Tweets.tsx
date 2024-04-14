@@ -58,6 +58,7 @@ const Tweets = ({ tweetData, tweetIndices }: TweetsProp) => {
                     retweets={tweet.retweets}
                     tweetType={tweet.tweetType}
                     bookmarks={tweet.bookmarks}
+                    repliedTweetIndex={tweet.repliedTweetIndex}
                   />
                 </>
               );
@@ -83,6 +84,7 @@ const Tweets = ({ tweetData, tweetIndices }: TweetsProp) => {
                     retweets={tweet.retweets}
                     tweetType={tweet.tweetType}
                     bookmarks={tweet.bookmarks}
+                    repliedTweetIndex={tweet.repliedTweetIndex}
                   />
                 </>
               );

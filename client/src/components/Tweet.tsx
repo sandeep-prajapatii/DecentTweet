@@ -15,11 +15,8 @@ import {
   truncateAddress,
 } from "../helperFunctions";
 import CommentModal from "./Modals/CommentModal";
-import repostIcon from "../assets/icons/tweet/repost.svg";
 import RepostModal from "./RepostModal";
 import {
-  QuotedTweetData,
-  QuotedTweetDataDefaultValue,
   TweetData,
   TweetType,
   UserDetailsDefaultValues,
@@ -34,6 +31,9 @@ import {
   DecentTweetContractAddress as address,
 } from "../contract/DecentTweetABI";
 import { useLocation, useNavigate } from "react-router-dom";
+import ReTweet from "./ReTweet";
+import Quote from "./Quote";
+import Reply from "./Reply";
 
 const Tweet = ({
   authorAddress,
@@ -48,6 +48,7 @@ const Tweet = ({
   tweetMsg,
   tweetType,
   bookmarks,
+  repliedTweetIndex,
 }: TweetData) => {
   const location = useLocation();
   const currentLocation = location.pathname;
@@ -56,15 +57,10 @@ const Tweet = ({
   const [currentTweetType, setCurrentTweetType] = useState<TweetType>(
     TweetType.TWEET
   );
-  const [quotedTweetData, setQuotedTweetData] = useState<QuotedTweetData>(
-    QuotedTweetDataDefaultValue
-  );
+
   const [userDetails, setUserDetails] = useState<UserDetailsType>(
     UserDetailsDefaultValues
   );
-  // const [currentTweetData, setCurrentTweetData] = useState<TweetData>(
-  //   TweetDataDefaultValue
-  // );
 
   const [userEngagement, setUserEngagement] = useState<UserEngagementType>(
     UserEngagementDefaultValue
@@ -73,7 +69,7 @@ const Tweet = ({
   const [isCommentModalOpen, setIsCommentModalOpen] = useState<boolean>(false);
   const [isRepostModalOpen, setIsRepostModalOpen] = useState<boolean>(false);
 
-  const { data: hash, writeContract } = useWriteContract();
+  const { writeContract, writeContractAsync } = useWriteContract();
   const { address: userAddress } = useAccount();
 
   const DTAAA = {
@@ -140,15 +136,24 @@ const Tweet = ({
     // if (isSuccess) closeCommentModal();
   };
 
+  const handleRetweet = () => {
+    writeContractAsync({
+      ...DTAAA,
+      functionName: "retweet",
+      args: [tweetIndex],
+    });
+    closeRespostModal();
+  };
+
   const handleBookMark = () => {
     // if the user is already present in the bookmark array then remove it from the book mark.
     if (userAddress && bookmarks && bookmarks.includes(userAddress)) {
       // Here call the dislike function
-       writeContract({
-         ...DTAAA,
-         functionName: "unbookmarkTweet",
-         args: [tweetIndex],
-       });
+      writeContract({
+        ...DTAAA,
+        functionName: "unbookmarkTweet",
+        args: [tweetIndex],
+      });
     } else {
       writeContract({
         ...DTAAA,
@@ -195,20 +200,6 @@ const Tweet = ({
     }
   }, [authorAddress, data]);
 
-  // Setting the Quoted Tweet Data if any
-  useEffect(() => {
-    if (data && data[1].result && quotedTweetIndex > 0) {
-      const result = data[1].result as any;
-      setQuotedTweetData({
-        authorAddress: result.authorAddress,
-        authorName: result.authorName,
-        timestamp: result.timestamp,
-        tweetIndex: result.tweetIndex,
-        tweetMsg: result.tweetMsg,
-      });
-    }
-  }, [quotedTweetIndex, data]);
-
   // Setting the tweet Type
   useEffect(() => {
     if (tweetType === 3) {
@@ -226,66 +217,46 @@ const Tweet = ({
 
   return (
     <div className="p-2">
-      {currentTweetType === TweetType.REPOST && (
-        <div className="flex gap-1 m-1">
-          <img src={repostIcon} className="h-4" />
-          <p className="text-sm text-neutral-400 font-semibold">
-            userAddress / userName
-          </p>
-        </div>
-      )}
-      <div
-        onClick={() => navigate(`/profile/${authorAddress}`)}
-        className="flex items-center gap-2 mb-2 "
-      >
-        <div className="h-10 w-10 object-contain">
-          <GenerateAvatar userAddress={authorAddress} size={40} />
-        </div>
-        <div className="flex items-center gap-2">
-          {authorName !== "" && (
-            <>
-              <p>{authorName}</p>
-              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-            </>
-          )}
-          <p>{truncateAddress(authorAddress || "")}</p>
-          <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-          <p className="text-neutral-500">
-            {calculateTimeDifference(Number(timestamp))}
-          </p>
-        </div>
-      </div>
-      <p onClick={() => navigate(`/tweet/${tweetIndex}`)} className="mb-2">
-        {tweetMsg}
-      </p>
-
-      {currentTweetType === TweetType.QUOTE && (
-        <div className="border-2 border-neutral-700 mx-auto w-[90%] rounded-md">
-          <div className=" p-2">
-            <div className="flex items-center gap-2">
-              <div className="h-10 w-10 object-contain">
-                <GenerateAvatar
-                  userAddress={quotedTweetData.authorAddress}
-                  size={40}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                {quotedTweetData.authorName !== "" && (
-                  <>
-                    <p>{quotedTweetData.authorName}</p>
-                    <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-                  </>
-                )}
-                <p>{truncateAddress(quotedTweetData.authorAddress)}</p>
-                <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-                <p className="text-neutral-500">
-                  {calculateTimeDifference(Number(quotedTweetData.timestamp))}
-                </p>
-              </div>
+      {currentTweetType === TweetType.TWEET ? (
+        <>
+          <div
+            onClick={() => navigate(`/profile/${authorAddress}`)}
+            className="flex items-center gap-2 mb-2 "
+          >
+            <div className="h-10 w-10 object-contain">
+              <GenerateAvatar userAddress={authorAddress} size={40} />
             </div>
-            <p className="mt-2">{quotedTweetData.tweetMsg}</p>
+            <div className="flex items-center gap-2">
+              {authorName !== "" && (
+                <>
+                  <p>{authorName}</p>
+                  <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
+                </>
+              )}
+              <p>{truncateAddress(authorAddress || "")}</p>
+              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
+              <p className="text-neutral-500">
+                {calculateTimeDifference(Number(timestamp))}
+              </p>
+            </div>
           </div>
-        </div>
+          <p onClick={() => navigate(`/tweet/${tweetIndex}`)} className="mb-2">
+            {tweetMsg}
+          </p>
+        </>
+      ) : currentTweetType === TweetType.REPOST ? (
+        <>
+          <ReTweet
+            originalTweet={quotedTweetIndex}
+            retweetedBy={authorAddress}
+          />
+        </>
+      ) : currentTweetType === TweetType.QUOTE ? (
+        <Quote originalTweet={quotedTweetIndex} quotedTweet={tweetIndex} />
+      ) : (
+        currentTweetType === TweetType.REPLY && (
+          <Reply originalTweet={repliedTweetIndex} replyTweet={tweetIndex} />
+        )
       )}
 
       {/* Post Engagement Buttons */}
@@ -332,7 +303,11 @@ const Tweet = ({
           <p className={userEngagement.isRetweeted ? "text-[#00b679]" : ""}>
             {quotes.length + retweets.length}
           </p>
-          <RepostModal isOpen={isRepostModalOpen} onClose={closeRespostModal} />
+          <RepostModal
+            retweet={() => handleRetweet()}
+            isOpen={isRepostModalOpen}
+            onClose={closeRespostModal}
+          />
         </div>
 
         <img src={share} alt="share" className="h-6 w-6" />
