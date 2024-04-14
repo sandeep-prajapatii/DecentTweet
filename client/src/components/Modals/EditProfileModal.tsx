@@ -1,17 +1,27 @@
 import { useState } from "react";
+
 import cross from "../../assets/cross.svg";
+import {
+  DecentTweetAbi as abi,
+  DecentTweetContractAddress as address,
+} from "../../contract/DecentTweetABI";
+import { useWriteContract } from "wagmi";
 
 type EditProfileModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => {
-  const handleUpdate = () => {
-    console.log(username);
+  const [username, setUsername] = useState<string>("");
+  const [userBio, setUserBio] = useState<string>("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+
+  const DTAAA = {
+    address: address as `0x${string}`,
+    abi,
   };
 
-  const [username, setUsername] = useState<string>("");
-  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const { writeContract } = useWriteContract();
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newUsername = event.target.value;
@@ -20,8 +30,23 @@ const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => {
       setUsername(newUsername);
       setUsernameError(null);
     } else {
-      setUsernameError("Username can only contain lowercase letters, numbers, and underscores.");
+      setUsernameError(
+        "Username can only contain lowercase letters, numbers, and underscores."
+      );
     }
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleBioChange = (e: any) => {
+    setUserBio(e.target.value);
+  };
+
+  const handleUpdate = () => {
+    writeContract({
+      ...DTAAA,
+      functionName: "updateUserProfile",
+      args: [username, userBio],
+    });
+    onClose()
   };
 
   return (
@@ -50,11 +75,16 @@ const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => {
             pattern="[a-z0-9_]*"
             required
           />
-          {usernameError && <p className="text-red-500 mt-2 text-sm text-center">{usernameError}</p>}
+          {usernameError && (
+            <p className="text-red-500 mt-2 text-sm text-center">
+              {usernameError}
+            </p>
+          )}
         </div>
         <div className="p-2 ">
           <p className="ml-2 font-semibold">Bio</p>
           <input
+            onChange={handleBioChange}
             type="text"
             className="w-full p-2 rounded-md bg-transparent focus:outline-none focus:border-b-2 border-neutral-700"
             placeholder="Please enter bio to update"
@@ -63,7 +93,7 @@ const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => {
         <div className="flex items-center mt-5 mb-2">
           <button
             className="font-semibold bg-white px-3 py-1 rounded-md text-black mx-auto"
-            onClick={()=>handleUpdate()}
+            onClick={() => handleUpdate()}
           >
             Update Changes
           </button>
