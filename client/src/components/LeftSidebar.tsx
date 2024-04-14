@@ -28,8 +28,6 @@ const LeftSidebar = () => {
     setIsPostModalOpen(false);
   };
 
-  
-
   const links = [
     { to: "/", label: "Home", icon: home },
     { to: "/messages", label: "Messages", icon: message },
@@ -112,7 +110,12 @@ const LeftSidebar = () => {
           </div>
         </div>
       </div>
-      <PostModal onClose={onClose} isOpen={isPostModalOpen} />
+      <PostModal
+        onClose={onClose}
+        isOpen={isPostModalOpen}
+        isQuotable={false}
+        originalTweetIndex={0}
+      />
     </div>
   );
 };

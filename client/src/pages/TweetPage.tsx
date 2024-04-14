@@ -249,6 +249,7 @@ const TweetPage = () => {
             isOpen={isRepostModalOpen}
             onClose={closeRespostModal}
             retweet={() => handleRetweet()}
+            originalTweetIndex={Number(tweetIndex)}
           />
         </div>
 

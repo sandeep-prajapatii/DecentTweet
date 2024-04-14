@@ -307,6 +307,7 @@ const Tweet = ({
             retweet={() => handleRetweet()}
             isOpen={isRepostModalOpen}
             onClose={closeRespostModal}
+            originalTweetIndex={tweetIndex}
           />
         </div>
 
