@@ -23,7 +23,7 @@ import {
   UserEngagementType,
 } from "../utils/helper";
 import { useAccount, useReadContracts, useWriteContract } from "wagmi";
-import { formatUnixTimestamp, truncateAddress } from "../helperFunctions";
+import { GenerateAvatar, formatUnixTimestamp, truncateAddress } from "../helperFunctions";
 import RepostModal from "../components/RepostModal";
 import Tweets from "../components/Tweets";
 
@@ -134,10 +134,6 @@ const TweetPage = () => {
       const tweetData = contractData[0].result as TweetData;
       setCurrentTweetData(tweetData);
     }
-    // if (contractData && contractData[1].result) {
-    //   const tweetData = contractData[1].result as TweetData;
-    //   (tweetData);
-    // }
   }, [contractData]);
 
   return (
@@ -146,8 +142,12 @@ const TweetPage = () => {
         <img onClick={() => navigate("/")} src={back} className="h-6 w-6" />
         <p className="text-xl font-semibold ml-4">Post</p>
       </div>
-      <div className="flex mt-4">
-        <img src={pfp} className="h-10 w-10 rounded-full m-2" alt="profile" />
+      <div className="flex mt-4 px-2">
+        <GenerateAvatar
+          userAddress={currentTweetData.authorAddress}
+          size={40}
+          
+        />
         <div>
           <p className="text-semibold">{currentTweetData.authorName}</p>
           <p className="text-neutral-500">
@@ -219,8 +219,12 @@ const TweetPage = () => {
         </div>
       </div>
 
-      <div className="flex items-center mx-4  border-neutral-700">
-        <img src={pfp} className="h-10 w-10 rounded-full m-2" alt="profile" />
+      <div className="flex items-center mx-4 py-2 border-neutral-700">
+        <GenerateAvatar
+           
+          userAddress={String(userAddress)}
+          size={40}
+        />
         <input
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChange={(e: any) => handleChange(e)}

@@ -22,6 +22,7 @@ import repostIcon from "../assets/icons/tweet/repost.svg";
 
 const ReTweet = ({ originalTweet, retweetedBy }: RetweetType) => {
   const navigate = useNavigate();
+
   const [originalTweetData, setOriginalTweetData] = useState<TweetData>(
     TweetDataDefaultValue
   );
@@ -86,6 +87,7 @@ const ReTweet = ({ originalTweet, retweetedBy }: RetweetType) => {
           {truncateAddress(userDetails.userAddress)} reposted
         </p>
       </div>
+
       <div
         onClick={() => navigate(`/profile/${originalTweetData.authorAddress}`)}
         className="flex items-center gap-2 mb-2 "
