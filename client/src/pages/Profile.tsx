@@ -1,8 +1,4 @@
-import {
-  useAccount,
-  useReadContracts,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, useReadContracts, useWriteContract } from "wagmi";
 import { GenerateAvatar, generateUsername } from "../helperFunctions";
 import PostDashboard from "../components/Dashboard/PostDashboard";
 import RepliesDashboard from "../components/Dashboard/RepliesDashboard";
@@ -31,12 +27,12 @@ const Profile = () => {
   const [selectedTab, setSelectedTab] = useState("Post");
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const temp: string = generateUsername(address)
-  console.log("username", temp)
+  const temp: string = generateUsername(address);
+  console.log("username", temp);
 
   const onClose = () => {
     setOpenEditModal(false);
-  }
+  };
 
   const DTAAA = {
     address: address as `0x${string}`,
@@ -126,7 +122,10 @@ const Profile = () => {
             {userDetails.userName === "" ? "userName" : userDetails.userName}
           </p>
           {currentUserAddress === userAddress ? (
-            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md" onClick={()=>setOpenEditModal(true)}>
+            <button
+              className="bg-white text-black font-semibold p-1 px-3 rounded-md"
+              onClick={() => setOpenEditModal(true)}
+            >
               Edit
             </button>
           ) : (
@@ -164,7 +163,14 @@ const Profile = () => {
         </p>
       </div>
 
-      <div className="flex mx-4 mt-4 gap-4" onClick={() => navigate(`/profile/connections`)}>
+      <div
+        className="flex mx-4 mt-4 gap-4"
+        onClick={() =>
+          navigate(`/profile/connections`, {
+            state: { userAddress: userDetails.userAddress },
+          })
+        }
+      >
         <p className="text-neutral-400 ">
           <span className="text-white font-semibold mr-1">
             {userDetails.followers.length}
@@ -220,7 +226,7 @@ const Profile = () => {
             <LikesDashboard tweetIndices={userDetails.likes} />
           )}
         </div>
-        <EditProfileModal isOpen={openEditModal} onClose={onClose}/>
+        <EditProfileModal isOpen={openEditModal} onClose={onClose} />
       </div>
     </div>
   );
