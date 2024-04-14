@@ -1,10 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import pfp from "../assets/pfp/pfp2.jpeg";
 import back from "../assets/back.svg";
 import like from "../assets/icons/tweet/heart.svg";
 import bookmark from "../assets/icons/tweet/bookmark.svg";
-import comment from "../assets/icons/tweet/comment.svg";
 import share from "../assets/icons/tweet/share.svg";
 import repost from "../assets/icons/tweet/repost.svg";
 import likePink from "../assets/icons/tweet/heartPink.svg";
@@ -113,7 +111,7 @@ const TweetPage = () => {
   };
   const handleBookMark = () => {
     // if the user is already present in the bookmark array then remove it from the book mark.
-    if (userAddress && bookmarks && bookmarks.includes(userAddress)) {
+    if (userAddress && currentTweetData.bookmarks && currentTweetData.bookmarks.includes(userAddress)) {
       // Here call the dislike function
       writeContract({
         ...DTAAA,
