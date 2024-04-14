@@ -83,7 +83,7 @@ const PostModal = ({
       onClick={onClose}
       className={` ${
         isOpen === false && "hidden"
-      } flex justify-center  h-screen w-screen absolute top-0 left-0 bg-white bg-opacity-20 `}
+      } flex justify-center  h-screen w-screen fixed top-0 left-0 bg-white bg-opacity-20 `}
     >
       <div
         onClick={(event) => event.stopPropagation()}

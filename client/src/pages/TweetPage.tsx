@@ -28,7 +28,7 @@ import {
   formatUnixTimestamp,
   truncateAddress,
 } from "../helperFunctions";
-import RepostModal from "../components/RepostModal";
+import RepostModal from "../components/Modals/RepostModal";
 import Tweets from "../components/Tweets";
 
 const TweetPage = () => {

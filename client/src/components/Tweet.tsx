@@ -15,7 +15,7 @@ import {
   truncateAddress,
 } from "../helperFunctions";
 import CommentModal from "./Modals/CommentModal";
-import RepostModal from "./RepostModal";
+import RepostModal from "./Modals/RepostModal";
 import {
   TweetData,
   TweetType,
@@ -286,6 +286,12 @@ const Tweet = ({
           <p>{replies.length}</p>
         </div>
         <div className="flex items-center gap-1 text-sm">
+          <RepostModal
+            retweet={() => handleRetweet()}
+            isOpen={isRepostModalOpen}
+            onClose={closeRespostModal}
+            originalTweetIndex={tweetIndex}
+          />
           <img
             onClick={() => {
               setIsRepostModalOpen(!isRepostModalOpen);
@@ -303,12 +309,6 @@ const Tweet = ({
           <p className={userEngagement.isRetweeted ? "text-[#00b679]" : ""}>
             {quotes.length + retweets.length}
           </p>
-          <RepostModal
-            retweet={() => handleRetweet()}
-            isOpen={isRepostModalOpen}
-            onClose={closeRespostModal}
-            originalTweetIndex={tweetIndex}
-          />
         </div>
 
         <img src={share} alt="share" className="h-6 w-6" />
