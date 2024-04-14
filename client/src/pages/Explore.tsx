@@ -1,9 +1,9 @@
+import Search from "../components/Search";
+
 const Explore = () => {
   return (
-    <div>
-      <p className="text-xl font-bold text-center p-2 border-b-2 border-neutral-700">
-        Explore
-      </p>
+    <div className="px-2">
+      <Search />
     </div>
   );
 };

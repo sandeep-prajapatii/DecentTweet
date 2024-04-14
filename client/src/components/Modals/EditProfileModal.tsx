@@ -1,12 +1,27 @@
+import { useState } from "react";
 import cross from "../../assets/cross.svg";
 
-type PostModalProps = {
+type EditProfileModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
-const EditProfileModal = ({ isOpen, onClose }: PostModalProps) => {
+const EditProfileModal = ({ isOpen, onClose }: EditProfileModalProps) => {
   const handleUpdate = () => {
-    console.log("update is clicked");
+    console.log(username);
+  };
+
+  const [username, setUsername] = useState<string>("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newUsername = event.target.value;
+    const regex = /^[a-z0-9_]*$/;
+    if (regex.test(newUsername)) {
+      setUsername(newUsername);
+      setUsernameError(null);
+    } else {
+      setUsernameError("Username can only contain lowercase letters, numbers, and underscores.");
+    }
   };
 
   return (
@@ -30,7 +45,12 @@ const EditProfileModal = ({ isOpen, onClose }: PostModalProps) => {
             type="text"
             className="w-full p-2 rounded-md bg-transparent focus:outline-none focus:border-b-2 border-neutral-700"
             placeholder="Please enter name to update"
+            value={username}
+            onChange={handleUsernameChange}
+            pattern="[a-z0-9_]*"
+            required
           />
+          {usernameError && <p className="text-red-500 mt-2 text-sm text-center">{usernameError}</p>}
         </div>
         <div className="p-2 ">
           <p className="ml-2 font-semibold">Bio</p>
