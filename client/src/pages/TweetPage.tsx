@@ -17,11 +17,17 @@ import {
 import {
   TweetData,
   TweetDataDefaultValue,
+  UserDetailsDefaultValues,
+  UserDetailsType,
   UserEngagementDefaultValue,
   UserEngagementType,
 } from "../utils/helper";
 import { useAccount, useReadContracts, useWriteContract } from "wagmi";
-import { GenerateAvatar, formatUnixTimestamp, truncateAddress } from "../helperFunctions";
+import {
+  GenerateAvatar,
+  formatUnixTimestamp,
+  truncateAddress,
+} from "../helperFunctions";
 import RepostModal from "../components/RepostModal";
 import Tweets from "../components/Tweets";
 
@@ -43,6 +49,10 @@ const TweetPage = () => {
   const { writeContract } = useWriteContract();
   const { address: userAddress } = useAccount();
 
+  const [userDetails, setUserDetails] = useState<UserDetailsType>(
+    UserDetailsDefaultValues
+  );
+
   const DTAAA = {
     address: address as `0x${string}`,
     abi,
@@ -57,8 +67,8 @@ const TweetPage = () => {
       },
       {
         ...DTAAA,
-        functionName: "getTweetsByIndices",
-        args: [currentTweetData.replies],
+        functionName: "getPublicUserDetails",
+        args: [userAddress],
       },
     ],
   });
@@ -111,7 +121,11 @@ const TweetPage = () => {
   };
   const handleBookMark = () => {
     // if the user is already present in the bookmark array then remove it from the book mark.
-    if (userAddress && currentTweetData.bookmarks && currentTweetData.bookmarks.includes(userAddress)) {
+    if (
+      userAddress &&
+      currentTweetData.bookmarks &&
+      currentTweetData.bookmarks.includes(userAddress)
+    ) {
       // Here call the dislike function
       writeContract({
         ...DTAAA,
@@ -127,10 +141,46 @@ const TweetPage = () => {
     }
   };
 
+  // updated the userEngagement.
+  useEffect(() => {
+    if (
+      userAddress &&
+      currentTweetData.likedBy &&
+      currentTweetData.likedBy.includes(userAddress)
+    ) {
+      setUserEngagement({
+        isLiked: true,
+      });
+    }
+    if (
+      tweetIndex &&
+      userAddress &&
+      userDetails.posts.includes(Number(tweetIndex))
+    ) {
+      setUserEngagement({
+        isReplied: true,
+      });
+    }
+    if (
+      tweetIndex &&
+      userAddress &&
+      userDetails.bookmarks.includes(Number(tweetIndex))
+    ) {
+      setUserEngagement({
+        isBookMarked: true,
+      });
+    }
+  }, [userDetails, userAddress, tweetIndex, currentTweetData.likedBy]);
+
   useEffect(() => {
     if (contractData && contractData[0].result) {
       const tweetData = contractData[0].result as TweetData;
       setCurrentTweetData(tweetData);
+    }
+
+    if (contractData && contractData[1].result) {
+      const userDetails = contractData[1].result as UserDetailsType;
+      setUserDetails(userDetails);
     }
   }, [contractData]);
 
@@ -144,7 +194,6 @@ const TweetPage = () => {
         <GenerateAvatar
           userAddress={currentTweetData.authorAddress}
           size={40}
-          
         />
         <div>
           <p className="text-semibold">{currentTweetData.authorName}</p>
@@ -218,11 +267,7 @@ const TweetPage = () => {
       </div>
 
       <div className="flex items-center mx-4 py-2 border-neutral-700">
-        <GenerateAvatar
-           
-          userAddress={String(userAddress)}
-          size={40}
-        />
+        <GenerateAvatar userAddress={String(userAddress)} size={40} />
         <input
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChange={(e: any) => handleChange(e)}
