@@ -5,6 +5,7 @@ import message from "../assets/icons/navbar/message.svg";
 import bookmarkWhite from "../assets/icons/tweet/bookmark-white.svg";
 import logouticon from "../assets/icons/navbar/logout.svg";
 import profile from "../assets/icons/navbar/profile.svg";
+import magnify from "../assets/icons/navbar/magnify.svg";
 
 import { useAccount, useDisconnect } from "wagmi";
 import { GenerateAvatar, truncateAddress } from "../helperFunctions";
@@ -44,7 +45,7 @@ const LeftSidebar = () => {
     <div className="h-screen min-w-[80px] lg:min-w-[200px] pr-2">
       <div className="h-screen flex flex-col justify-between">
         <div>
-          <p className="p-2 my-4 text-xl text-center font-semibold">DT</p>
+          <Link to="/" className="p-2 block my-4 text-xl text-center font-semibold">DT</Link>
 
           <div className="flex flex-col gap-2">
             {links.map((link) => (
@@ -62,10 +63,20 @@ const LeftSidebar = () => {
               </Link>
             ))}
           </div>
+          <Link
+            to="/explore"
+            className={` lg:hidden flex gap-2 p-2 text-xl items-center justify-center lg:justify-start ${
+              location.pathname === "search"
+                ? "border-2 border-neutral-700 rounded-md  "
+                : ""
+            }`}
+          >
+            <img className="h-7 w-7 " src={magnify} alt="search" />
+          </Link>
 
           <button
             onClick={() => setShowPostModal(true)}
-            className="bg-white w-full p-2 text-xl rounded-md font-semibold text-black mt-2"
+            className="bg-white w-full p-2 lg:p-1 lg:text-xl text-lg rounded-md font-semibold text-black mt-2"
           >
             Post
           </button>
