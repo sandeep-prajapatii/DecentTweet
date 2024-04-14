@@ -3,7 +3,7 @@ import {
   useReadContracts,
   useWriteContract,
 } from "wagmi";
-import { GenerateAvatar } from "../helperFunctions";
+import { GenerateAvatar, generateUsername } from "../helperFunctions";
 import PostDashboard from "../components/Dashboard/PostDashboard";
 import RepliesDashboard from "../components/Dashboard/RepliesDashboard";
 import LikesDashboard from "../components/Dashboard/LikesDashboard";
@@ -13,9 +13,11 @@ import {
 } from "../contract/DecentTweetABI";
 import { useEffect, useState } from "react";
 import { UserDetailsDefaultValues, UserDetailsType } from "../utils/helper";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import EditProfileModal from "../components/Modals/EditProfileModal";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { userAddress } = useParams();
   const [userDetails, setUserDetails] = useState<UserDetailsType>(
     UserDetailsDefaultValues
@@ -27,6 +29,14 @@ const Profile = () => {
   );
 
   const [selectedTab, setSelectedTab] = useState("Post");
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  const temp: string = generateUsername(address)
+  console.log("username", temp)
+
+  const onClose = () => {
+    setOpenEditModal(false);
+  }
 
   const DTAAA = {
     address: address as `0x${string}`,
@@ -116,7 +126,7 @@ const Profile = () => {
             {userDetails.userName === "" ? "userName" : userDetails.userName}
           </p>
           {currentUserAddress === userAddress ? (
-            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md">
+            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md" onClick={()=>setOpenEditModal(true)}>
               Edit
             </button>
           ) : (
@@ -154,17 +164,17 @@ const Profile = () => {
         </p>
       </div>
 
-      <div className="flex mx-4 mt-4 gap-4">
+      <div className="flex mx-4 mt-4 gap-4" onClick={() => navigate(`/profile/connections`)}>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold mr-1">
             {userDetails.followers.length}
-          </span>{" "}
+          </span>
           Followers
         </p>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold mr-1">
             {userDetails.following.length}
-          </span>{" "}
+          </span>
           Following
         </p>
       </div>
@@ -210,6 +220,7 @@ const Profile = () => {
             <LikesDashboard tweetIndices={userDetails.likes} />
           )}
         </div>
+        <EditProfileModal isOpen={openEditModal} onClose={onClose}/>
       </div>
     </div>
   );
