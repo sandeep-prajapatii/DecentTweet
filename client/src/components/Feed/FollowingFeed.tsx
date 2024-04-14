@@ -1,6 +1,6 @@
-import Tweet from "../Tweet";
 import { useReadContract } from "wagmi";
 import { DecentTweetAbi } from "../../contract/DecentTweetABI";
+import { useEffect, useState } from "react";
 
 interface TweetData {
   author: string;

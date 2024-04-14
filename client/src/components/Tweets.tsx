@@ -1,41 +1,96 @@
-import { TweetData } from "../utils/helper";
+import { useEffect, useState } from "react";
+import { TweetData, TweetDataDefaultValue } from "../utils/helper";
 import Tweet from "./Tweet";
+import { useReadContract } from "wagmi";
+import {
+  DecentTweetContractAddress as address,
+  DecentTweetAbi as abi,
+} from "../contract/DecentTweetABI";
 
 type TweetsProp = {
   tweetData: TweetData[];
   tweetIndices?: number[];
 };
-const Tweets = ({ tweetData }: TweetsProp) => {
-  // const [tweetIndices, setTweetIndices] = useState(); // according to the indexed fetch and map it below
+const Tweets = ({ tweetData, tweetIndices }: TweetsProp) => {
+  const [tweetsArray, setTweetsArray] = useState<TweetData[]>([
+    TweetDataDefaultValue,
+  ]);
 
-  // const { data, status } = useReadContract({
-  //   abi,
-  //   address: address as `0x${string}`,
-  //   functionName: "getAllTweets",
-  // });
+  const DTAAA = {
+    address: address as `0x${string}`,
+    abi,
+  };
+
+  const { data } = useReadContract({
+    ...DTAAA,
+    functionName: "getTweetsByIndices",
+    args: [tweetIndices],
+  });
+
+  console.log(data);
+
+  useEffect(() => {
+    if (tweetIndices && tweetIndices.length > 0 && data) {
+      const tweets = data as TweetData[];
+      setTweetsArray(tweets);
+    }
+    console.log("THis is data ", data);
+  }, [data, tweetIndices]);
 
   return (
-    <div>
-      {tweetData.map((tweet) => {
-        return (
-          <>
-            <Tweet
-              authorAddress={tweet.authorAddress}
-              authorName=""
-              timestamp={tweet.timestamp}
-              tweetMsg={tweet.tweetMsg}
-              tweetIndex={tweet.tweetIndex}
-              likedBy={tweet.likedBy}
-              replies={tweet.replies}
-              quotedTweetIndex={tweet.quotedTweetIndex}
-              quotes={tweet.quotes}
-              retweets={tweet.retweets}
-              tweetType={tweet.tweetType}
-            />
-          </>
-        );
-      })}
-    </div>
+    <>
+      {tweetIndices && tweetIndices.length > 0 ? (
+        <>
+          <div>
+            {tweetsArray.map((tweet) => {
+              return (
+                <>
+                  <Tweet
+                    authorAddress={tweet.authorAddress}
+                    authorName={tweet.authorName}
+                    timestamp={tweet.timestamp}
+                    tweetMsg={tweet.tweetMsg}
+                    tweetIndex={tweet.tweetIndex}
+                    likedBy={tweet.likedBy}
+                    replies={tweet.replies}
+                    quotedTweetIndex={tweet.quotedTweetIndex}
+                    quotes={tweet.quotes}
+                    retweets={tweet.retweets}
+                    tweetType={tweet.tweetType}
+                    bookmarks={tweet.bookmarks}
+                  />
+                </>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            {tweetData.map((tweet) => {
+              return (
+                <>
+                  <Tweet
+                    authorAddress={tweet.authorAddress}
+                    authorName={tweet.authorName}
+                    timestamp={tweet.timestamp}
+                    tweetMsg={tweet.tweetMsg}
+                    tweetIndex={tweet.tweetIndex}
+                    likedBy={tweet.likedBy}
+                    replies={tweet.replies}
+                    quotedTweetIndex={tweet.quotedTweetIndex}
+                    quotes={tweet.quotes}
+                    retweets={tweet.retweets}
+                    tweetType={tweet.tweetType}
+                    bookmarks={tweet.bookmarks}
+                  />
+                </>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

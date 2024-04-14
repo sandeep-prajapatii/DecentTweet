@@ -12,9 +12,7 @@ import { useState } from "react";
 import PostModal from "./Modals/PostModal";
 
 const LeftSidebar = () => {
-  const account = useAccount();
-  const userAddress: string = account?.address?.toString() || "";
-  const shortUserAddress = truncateAddress(userAddress);
+  const { address: userAddress } = useAccount();
 
   const location = useLocation();
   const { disconnect } = useDisconnect();
@@ -34,7 +32,7 @@ const LeftSidebar = () => {
     { to: "/", label: "Home", icon: home },
     { to: "/messages", label: "Messages", icon: message },
     { to: "/bookmarks", label: "Bookmarks", icon: bookmarkWhite },
-    { to: "/profile", label: "Profile", icon: profile },
+    { to: `/profile/${userAddress}`, label: "Profile", icon: profile },
   ];
 
   const logout = () => {
@@ -89,11 +87,13 @@ const LeftSidebar = () => {
             onClick={handleShowLogout}
             className="flex flex-col lg:flex-row gap-2 items-center justify-center border-2 border-neutral-700 rounded-md p-2 mb-6"
           >
-            <GenerateAvatar userAddress={userAddress} size={40} />
+            <GenerateAvatar userAddress={String(userAddress)} size={40} />
             <div className="flex-grow lg:block hidden">
               <p className="font-semibold">shaktiii</p>
               <div className="flex">
-                <p className="text-sm flex-grow">{shortUserAddress}</p>
+                <p className="text-sm flex-grow">
+                  {truncateAddress(String(userAddress))}
+                </p>
                 <div className="flex gap-[3px] px-1 items-center">
                   <div className="h-[3px] w-[3px] bg-white rounded-full"></div>
                   <div className="h-[3px] w-[3px] bg-white rounded-full"></div>

@@ -1,6 +1,61 @@
-import Tweet from "../components/Tweet";
+import { useAccount, useReadContracts } from "wagmi";
+import {
+  DecentTweetAbi as abi,
+  DecentTweetContractAddress as address,
+} from "../contract/DecentTweetABI";
+import { useEffect, useState } from "react";
+import {
+  TweetData,
+  TweetDataDefaultValue,
+  UserDetailsType,
+} from "../utils/helper";
+import Tweets from "../components/Tweets";
 
 const Bookmarks = () => {
+  const { address: userAddress } = useAccount();
+  const [indexOfBookMarkedTweets, setIndexOfBookMarkedTweets] = useState<
+    number[]
+  >([]);
+  const [bookmarkedTweetsArray, setBookmarkedTweetsArray] = useState<
+    TweetData[]
+  >([TweetDataDefaultValue]);
+
+  const DTAAA = {
+    address: address as `0x${string}`,
+    abi,
+  };
+
+  const { data } = useReadContracts({
+    contracts: [
+      {
+        ...DTAAA,
+        functionName: "getPublicUserDetails",
+        args: [userAddress],
+      },
+      {
+        ...DTAAA,
+        functionName: "getTweetsByIndices",
+        args: [indexOfBookMarkedTweets],
+      },
+    ],
+  });
+
+  useEffect(() => {
+    if (data && data[0].result) {
+      const userDetails = data[0].result as UserDetailsType;
+      setIndexOfBookMarkedTweets(userDetails.bookmarks);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data && data[1].result) {
+      const bookmarkedTweets = data[1].result as TweetData[];
+      setBookmarkedTweetsArray(bookmarkedTweets);
+    }
+  }, [data]);
+
+  console.log(indexOfBookMarkedTweets);
+  console.log(bookmarkedTweetsArray);
   return (
     <div>
       <p className="text-xl font-bold text-center p-2 border-b-2 border-neutral-700">
@@ -8,23 +63,11 @@ const Bookmarks = () => {
       </p>
 
       <div className="p-2 flex flex-col gap-2 divide-y divide-neutral-700">
-        <Tweet
-          address={"0x910373992d054eF318081c111cF4C87B44aBa869"}
-          timestamp={1712814671}
-          content="21 years old girl, MP of New Zealand sang Haka in the parliament"
-          index={55}
-          currentUserAddress=""
-          likes={4}
-          commentCount={3}
-          replyIndices={2}
-          quoted={false}
-          quotedTime={"2hours ago"}
-          quotedAddress={"0xD1dA53783AC49c61159182f2f20679338ED852e7"}
-          quotedContent={"She must be very brave"}
-          quotedLikes={2}
-          quotedCommentCount={1}
-          quotedReplyIndices={1}
-        />
+        {bookmarkedTweetsArray.length === 0 ? (
+          "You havent bookmarked anything"
+        ) : (
+          <Tweets tweetData={bookmarkedTweetsArray} />
+        )}
       </div>
     </div>
   );

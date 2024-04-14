@@ -1,19 +1,105 @@
-import { useAccount } from "wagmi";
+import {
+  useAccount,
+  useReadContracts,
+  useWriteContract,
+} from "wagmi";
 import { GenerateAvatar } from "../helperFunctions";
 import PostDashboard from "../components/Dashboard/PostDashboard";
 import RepliesDashboard from "../components/Dashboard/RepliesDashboard";
 import LikesDashboard from "../components/Dashboard/LikesDashboard";
-import { useState } from "react";
+import {
+  DecentTweetAbi as abi,
+  DecentTweetContractAddress as address,
+} from "../contract/DecentTweetABI";
+import { useEffect, useState } from "react";
+import { UserDetailsDefaultValues, UserDetailsType } from "../utils/helper";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
-  const account = useAccount();
-  const userAddress: string = account?.address?.toString() || "";
+  const { userAddress } = useParams();
+  const [userDetails, setUserDetails] = useState<UserDetailsType>(
+    UserDetailsDefaultValues
+  );
+
+  const { address: currentUserAddress } = useAccount();
+  const [currentUserDetails, setCurrentUserDetails] = useState<UserDetailsType>(
+    UserDetailsDefaultValues
+  );
 
   const [selectedTab, setSelectedTab] = useState("Post");
 
-  // const handleDashboardClick = () =>{
+  const DTAAA = {
+    address: address as `0x${string}`,
+    abi,
+  };
 
-  // }
+  const { writeContract } = useWriteContract();
+
+  const { data } = useReadContracts({
+    contracts: [
+      {
+        ...DTAAA,
+        functionName: "getPublicUserDetails",
+        args: [userAddress],
+      },
+      {
+        ...DTAAA,
+        functionName: "getPublicUserDetails",
+        args: [currentUserAddress],
+      },
+    ],
+  });
+
+  const handleFollowUnfollow = () => {
+    if (
+      userAddress &&
+      currentUserDetails.following.includes(userAddress as `0x${string}`)
+    ) {
+      writeContract({
+        ...DTAAA,
+        functionName: "unfollowUser",
+        args: [userAddress],
+      });
+    } else {
+      writeContract({
+        ...DTAAA,
+        functionName: "followUser",
+        args: [userAddress],
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      const result = data[0].result as UserDetailsType;
+      setUserDetails({
+        userAddress: result.userAddress,
+        userName: result.userName,
+        userBio: result.userBio,
+        bookmarks: result.bookmarks,
+        posts: result.posts,
+        likes: result.likes,
+        replies: result.replies,
+        followers: result.followers,
+        following: result.following,
+      });
+    }
+
+    if (data) {
+      const result = data[1].result as UserDetailsType;
+      setCurrentUserDetails({
+        userAddress: result.userAddress,
+        userName: result.userName,
+        userBio: result.userBio,
+        bookmarks: result.bookmarks,
+        posts: result.posts,
+        likes: result.likes,
+        replies: result.replies,
+        followers: result.followers,
+        following: result.following,
+      });
+    }
+  }, [userAddress, currentUserAddress, data]);
 
   return (
     <div className="flex flex-col h-full">
@@ -26,27 +112,62 @@ const Profile = () => {
 
       <div className="mx-4 mt-4">
         <div className="flex">
-        <p className="text-xl font-bold flex-grow">shaktiii</p>
-        <button className="bg-white text-black font-semibold p-1 px-3 rounded-md">
-        Follow
-      </button>
-
+          <p className="text-xl font-bold flex-grow">
+            {userDetails.userName === "" ? "userName" : userDetails.userName}
+          </p>
+          {currentUserAddress === userAddress ? (
+            <button className="bg-white text-black font-semibold p-1 px-3 rounded-md">
+              Edit
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => handleFollowUnfollow()}
+                className=" bg-white flex justify-center text-center text-black font-semibold p-1 px-3 rounded-md w-20 h-8"
+              >
+                {currentUserDetails.following.includes(
+                  userAddress as `0x${string}`
+                ) ? (
+                  <>
+                    <p>Unfollow</p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      {currentUserDetails.following.includes(
+                        userAddress as `0x${string}`
+                      )
+                        ? "Following"
+                        : "Follow"}
+                    </p>
+                  </>
+                )}
+              </button>
+            </>
+          )}
         </div>
-        <p className="text-neutral-400 ">{userAddress}</p>
+        <p className="text-neutral-400 ">{userDetails.userAddress}</p>
         <p className="mt-4">
-          Co-Founder @getWalletX || Changing the world, one frontend at a time.
+          {userDetails.userBio === ""
+            ? "Please Add a bio"
+            : userDetails.userBio}
         </p>
       </div>
 
       <div className="flex mx-4 mt-4 gap-4">
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">84</span> Followers
+          <span className="text-white font-semibold">
+            {userDetails.followers.length}
+          </span>{" "}
+          Followers
         </p>
         <p className="text-neutral-400 ">
-          <span className="text-white font-semibold">54</span> Following
+          <span className="text-white font-semibold">
+            {userDetails.following.length}
+          </span>{" "}
+          Following
         </p>
       </div>
-
 
       <div className="mt-4 flex flex-col flex-grow">
         <div className="flex  border-b border-neutral-700">
@@ -79,9 +200,15 @@ const Profile = () => {
           </div>
         </div>
         <div className="flex-grow ">
-          {selectedTab === "Post" && <PostDashboard />}
-          {selectedTab === "Replies" && <RepliesDashboard />}
-          {selectedTab === "Likes" && <LikesDashboard />}
+          {selectedTab === "Post" && (
+            <PostDashboard tweetIndices={userDetails.posts} />
+          )}
+          {selectedTab === "Replies" && (
+            <RepliesDashboard tweetIndices={userDetails.replies} />
+          )}
+          {selectedTab === "Likes" && (
+            <LikesDashboard tweetIndices={userDetails.likes} />
+          )}
         </div>
       </div>
     </div>
