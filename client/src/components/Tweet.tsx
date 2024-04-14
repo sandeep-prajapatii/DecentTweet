@@ -98,7 +98,7 @@ const Tweet = ({
     ],
   });
 
-  if (data) console.log(data);
+  // if (data) console.log(data);
 
   const closeCommentModal = () => {
     setIsCommentModalOpen(false);
