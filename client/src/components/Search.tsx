@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import magnify from "../assets/icons/navbar/magnify.svg"
+import { useAccount, useReadContracts, useWriteContract } from "wagmi";
+import {
+    DecentTweetAbi as abi,
+    DecentTweetContractAddress as address,
+  } from "../contract/DecentTweetABI";
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -7,6 +12,22 @@ const Search = () => {
         e.preventDefault();
         console.log("Search Term", searchTerm)
     }
+
+    const DTAAA = {
+        address: address as `0x${string}`,  
+        abi,
+      };
+      const { address: currentUserAddress } = useAccount();
+      const { data: contractData } = useReadContracts({
+        contracts: [
+          {
+            ...DTAAA,
+            functionName: "getPublicUserDetails",
+            args: ["0x719E60774D28E45f73F313d443178AE1Eabf2E50"],
+          },
+        ],
+      });
+      console.log(contractData)
   return (
     <div>
 
