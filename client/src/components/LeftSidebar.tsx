@@ -8,7 +8,7 @@ import profile from "../assets/icons/navbar/profile.svg";
 import magnify from "../assets/icons/navbar/magnify.svg";
 
 import { useAccount, useDisconnect } from "wagmi";
-import { GenerateAvatar, truncateAddress } from "../helperFunctions";
+import { GenerateAvatar, truncateAddress, generateUsername } from "../helperFunctions";
 import { useState } from "react";
 import PostModal from "./Modals/PostModal";
 
@@ -28,6 +28,8 @@ const LeftSidebar = () => {
   const onClose = () => {
     setIsPostModalOpen(false);
   };
+
+  const generatedUsername = generateUsername(String(userAddress))
 
   const links = [
     { to: "/", label: "Home", icon: home },
@@ -105,7 +107,7 @@ const LeftSidebar = () => {
           >
             <GenerateAvatar userAddress={String(userAddress)} size={40} />
             <div className="flex-grow lg:block hidden">
-              <p className="font-semibold">shaktiii</p>
+              <p className="font-semibold text-ellipsis overflow-hidden whitespace-nowrap w-[180px]">{generatedUsername}</p>
               <div className="flex">
                 <p className="text-sm flex-grow">
                   {truncateAddress(String(userAddress))}

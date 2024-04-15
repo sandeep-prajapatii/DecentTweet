@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { GenerateAvatar, truncateAddress } from "../../helperFunctions";
 import send from "../../assets/send.svg";
-import back from "../../assets/back.svg";
 import emoji from "../../assets/icons/createTweet/emoji.svg";
+import cross from "../../assets/cross.svg"
 import EmojiPicker from "emoji-picker-react";
 import { Theme } from "emoji-picker-react";
 import SentMessage from "./SentMessage";
@@ -77,7 +77,7 @@ const PersonalMessage = () => {
           onChange={handleInputChange}
         />
         <button className="pr-2" onClick={() => setShowEmoji(!showEmoji)}>
-          <img src={emoji} className="h-6 w-6" />
+          <img src={showEmoji ? cross : emoji} className="h-6 w-6" />
         </button>
         <button className="pr-2" onClick={handleSend}>
           <img src={send} className="h-6 w-6" />

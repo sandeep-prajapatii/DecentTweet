@@ -13,6 +13,7 @@ import {
   GenerateAvatar,
   calculateTimeDifference,
   truncateAddress,
+  generateUsername,
 } from "../helperFunctions";
 import CommentModal from "./Modals/CommentModal";
 import RepostModal from "./Modals/RepostModal";
@@ -53,6 +54,8 @@ const Tweet = ({
   const location = useLocation();
   const currentLocation = location.pathname;
   const navigate = useNavigate();
+
+  const generatedUsername = generateUsername(authorAddress);
 
   const [currentTweetType, setCurrentTweetType] = useState<TweetType>(
     TweetType.TWEET
@@ -227,12 +230,16 @@ const Tweet = ({
               <GenerateAvatar userAddress={authorAddress} size={40} />
             </div>
             <div className="flex items-center gap-2">
-              {authorName !== "" && (
+              {authorName !== "" ? (
                 <>
                   <p>{authorName}</p>
-                  <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
+                </>
+              ) : (
+                <>
+                  <p>{generatedUsername}</p>
                 </>
               )}
+              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
               <p>{truncateAddress(authorAddress || "")}</p>
               <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
               <p className="text-neutral-500">

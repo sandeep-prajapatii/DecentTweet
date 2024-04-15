@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenerateAvatar, truncateAddress } from "../helperFunctions";
+import { GenerateAvatar, truncateAddress, generateUsername } from "../helperFunctions";
 import { UserDetailsDefaultValues, UserDetailsType } from "../utils/helper";
 import { useAccount, useReadContracts, useWriteContract } from "wagmi";
 type TopUsersType = {
@@ -57,6 +57,8 @@ const TopUsers = ({ user }: TopUsersType) => {
       setCurrentUserDetails(usrDetails);
     }
   }, [contractData]);
+
+  const generatedUsername = generateUsername(user.userAddress)
   return (
     <div className="flex items-center justify-between border-2 border-neutral-700 rounded-md gap-2 p-2 ">
       <div className="flex gap-2">
@@ -65,7 +67,7 @@ const TopUsers = ({ user }: TopUsersType) => {
         </div>
         <div className="flex-1">
           <p className="whitespace-nowrap text-ellipsis overflow-hidden md:max-w-[150px]">
-            {user.userName}
+            {generatedUsername}
           </p>
           <p className="text-sm text-neutral-400 whitespace-nowrap text-ellipsis overflow-hidden md:max-w-[150px]">
             {truncateAddress(String(user.userAddress))}

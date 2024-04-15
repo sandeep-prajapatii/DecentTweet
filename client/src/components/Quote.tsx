@@ -4,6 +4,7 @@ import {
   GenerateAvatar,
   calculateTimeDifference,
   truncateAddress,
+  generateUsername,
 } from "../helperFunctions";
 import { TweetDataDefaultValue, TweetData, QuoteType } from "../utils/helper";
 import { useEffect, useState } from "react";
@@ -18,9 +19,15 @@ const Quote = ({ originalTweet, quotedTweet }: QuoteType) => {
   const [originalTweetData, setOriginalTweetData] = useState<TweetData>(
     TweetDataDefaultValue
   );
+  const generatedOriginalUsername = generateUsername(
+    originalTweetData.authorAddress
+  );
 
   const [currentTweetData, setCurrentTweetData] = useState<TweetData>(
     TweetDataDefaultValue
+  );
+  const generatedCurrentUsername = generateUsername(
+    currentTweetData.authorAddress
   );
 
   const DTAAA = {
@@ -67,12 +74,11 @@ const Quote = ({ originalTweet, quotedTweet }: QuoteType) => {
           />
         </div>
         <div className="flex items-center gap-2">
-          {currentTweetData.authorName !== "" && (
-            <>
-              <p>{currentTweetData.authorName}</p>
-              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-            </>
-          )}
+          <p>
+            {currentTweetData.authorName !== ""
+              ? generatedCurrentUsername
+              : currentTweetData.authorName}
+          </p>
           <p>{truncateAddress(currentTweetData.authorAddress || "")}</p>
           <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
           <p className="text-neutral-500">
@@ -97,12 +103,11 @@ const Quote = ({ originalTweet, quotedTweet }: QuoteType) => {
               />
             </div>
             <div className="flex items-center gap-2">
-              {originalTweetData.authorName !== "" && (
-                <>
-                  <p>{originalTweetData.authorName}</p>
-                  <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-                </>
-              )}
+              <p>
+                {originalTweetData.authorName !== ""
+                  ? generatedOriginalUsername
+                  : originalTweetData.authorName}
+              </p>
               <p>{truncateAddress(originalTweetData.authorAddress)}</p>
               <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
               <p className="text-neutral-500">

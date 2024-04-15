@@ -2,6 +2,9 @@ import { useState } from "react";
 import emoji from "../assets/icons/createTweet/emoji.svg";
 import image from "../assets/icons/createTweet/image.svg";
 import gif from "../assets/icons/createTweet/gif.svg";
+import cross from "../assets/cross.svg"
+import EmojiPicker from "emoji-picker-react";
+import { Theme } from "emoji-picker-react";
 import { useWriteContract } from "wagmi";
 import {
   DecentTweetAbi as abi,
@@ -10,6 +13,7 @@ import {
 
 const CreateTweet = () => {
   const [tweetContent, setTweetContent] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
   const { writeContract } = useWriteContract();
   const DTAAA = {
     abi,
@@ -31,20 +35,38 @@ const CreateTweet = () => {
     console.log(tweetContent);
     setTweetContent("");
   };
+
+  const handleInputChange = (e: any) => {
+    setTweetContent(e.target.value);
+  };
+  const handleEmojiClick = (selectedEmoji: string) => {
+    console.log(selectedEmoji);
+    setTweetContent(tweetContent + selectedEmoji);
+  };
   return (
     <div className="m-2 rounded-md border-2 border-neutral-700 p-2">
       <input
         type="text"
         value={tweetContent}
-        onChange={(e) => setTweetContent(e.target.value)}
+        onChange={handleInputChange}
         className="w-full p-2 bg-neutral-500 rounded-md placeholder:text-white focus:outline-none focus:border-dashed focus:border-b-2 border-black"
         placeholder="Please Create a Tweet"
       />
       <div className="flex justify-between mt-2">
-        <div className="flex gap-2 mt-2">
-          <img src={image} className="h-6" alt="image" />
-          <img src={gif} className="h-6" alt="gif" />
-          <img src={emoji} className="h-6" alt="emoji" />
+        <div className="flex gap-2 mt-2 relative">
+          {/* <img src={image} className="h-6" alt="image" />
+          <img src={gif} className="h-6" alt="gif" /> */}
+          <img src={showEmoji ? cross : emoji } className="h-6" alt="emoji" onClick={() => setShowEmoji(!showEmoji)}/>
+        {showEmoji && (
+        <div className="absolute  top-10 -left-2">
+          <EmojiPicker
+            theme={Theme.DARK}
+            height={400}
+            width={320}
+            onEmojiClick={(e) => handleEmojiClick(e.emoji)}
+          />
+        </div>
+      )}
         </div>
 
         <button

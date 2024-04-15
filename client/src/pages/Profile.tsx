@@ -27,8 +27,7 @@ const Profile = () => {
   const [selectedTab, setSelectedTab] = useState("Post");
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const temp: string = generateUsername(address);
-  console.log("username", temp);
+  const generatedUsername: string = generateUsername(userAddress ? userAddress : "");
 
   const onClose = () => {
     setOpenEditModal(false);
@@ -103,7 +102,7 @@ const Profile = () => {
         replies: result.replies,
         followers: result.followers,
         following: result.following,
-      });
+      }); 
     }
   }, [userAddress, currentUserAddress, data]);
 
@@ -119,7 +118,7 @@ const Profile = () => {
       <div className="mx-4 mt-4">
         <div className="flex">
           <p className="text-xl font-bold flex-grow">
-            {userDetails.userName === "" ? "userName" : userDetails.userName}
+            {userDetails.userName === "" ? generatedUsername : userDetails.userName}
           </p>
           {currentUserAddress === userAddress ? (
             <button

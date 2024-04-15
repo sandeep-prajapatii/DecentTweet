@@ -4,6 +4,7 @@ import {
   GenerateAvatar,
   calculateTimeDifference,
   truncateAddress,
+  generateUsername,
 } from "../helperFunctions";
 import {
   RetweetType,
@@ -26,9 +27,15 @@ const ReTweet = ({ originalTweet, retweetedBy }: RetweetType) => {
   const [originalTweetData, setOriginalTweetData] = useState<TweetData>(
     TweetDataDefaultValue
   );
+  const generatedOriginalUsername = generateUsername(
+    originalTweetData.authorAddress
+  );
 
   const [userDetails, setUserDetails] = useState<UserDetailsType>(
     UserDetailsDefaultValues
+  );
+  const generatedUserUsername = generateUsername(
+    userDetails.userAddress
   );
 
   const DTAAA = {
@@ -75,17 +82,18 @@ const ReTweet = ({ originalTweet, retweetedBy }: RetweetType) => {
 
   return (
     <>
-      <div className="flex gap-1 m-1">
+      <div className="flex gap-2 m-1 items-center">
         <img src={repostIcon} className="h-4" />
-        <p className="text-sm flex justify-center items-center gap-2 text-neutral-400 font-semibold">
-          {userDetails.userName !== "" && (
-            <>
-              <p>{userDetails.userName}</p>
-              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-            </>
-          )}
-          {truncateAddress(userDetails.userAddress)} reposted
+        <p>
+          {userDetails.userName !== ""
+            ? generatedUserUsername
+            : userDetails.userName}
         </p>
+        <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
+        <p>{truncateAddress(userDetails.userAddress)} </p>
+        <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
+        <p>reposted</p>
+        
       </div>
 
       <div
@@ -99,12 +107,11 @@ const ReTweet = ({ originalTweet, retweetedBy }: RetweetType) => {
           />
         </div>
         <div className="flex items-center gap-2">
-          {originalTweetData.authorName !== "" && (
-            <>
-              <p>{originalTweetData.authorName}</p>
-              <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
-            </>
-          )}
+          <p>
+            {originalTweetData.authorName !== ""
+              ? generatedOriginalUsername
+              : originalTweetData.authorName}
+          </p>
           <p>{truncateAddress(originalTweetData.authorAddress || "")}</p>
           <span className="h-1 w-1 bg-neutral-300 rounded-full"></span>
           <p className="text-neutral-500">

@@ -53,7 +53,7 @@ export const GenerateAvatar: React.FC<GenerateAvatarProps> = ({
 };
 
 export const generateUsername = (address: string): string => {
-  const name = anonyname(address);
+  const name = anonyname(address.toString());
   const parts = name.split(' ');
   return `${parts[0].toLowerCase()}_${parts[1].replace(/"/g, '').toLowerCase()}_${parts[2].toLowerCase()}`;
 };
