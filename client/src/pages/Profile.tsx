@@ -56,6 +56,8 @@ const Profile = () => {
     ],
   });
 
+  console.log
+
   const handleFollowUnfollow = () => {
     if (
       userAddress &&
@@ -78,34 +80,16 @@ const Profile = () => {
   useEffect(() => {
     if (data) {
       const result = data[0].result as UserDetailsType;
-      setUserDetails({
-        userAddress: result.userAddress,
-        userName: result.userName,
-        userBio: result.userBio,
-        bookmarks: result.bookmarks,
-        posts: result.posts,
-        likes: result.likes,
-        replies: result.replies,
-        followers: result.followers,
-        following: result.following,
-      });
+      setUserDetails(result);
     }
 
     if (data) {
       const result = data[1].result as UserDetailsType;
-      setCurrentUserDetails({
-        userAddress: result.userAddress,
-        userName: result.userName,
-        userBio: result.userBio,
-        bookmarks: result.bookmarks,
-        posts: result.posts,
-        likes: result.likes,
-        replies: result.replies,
-        followers: result.followers,
-        following: result.following,
-      });
+      setCurrentUserDetails(result);
     }
   }, [userAddress, currentUserAddress, data]);
+
+  console.log(userDetails , currentUserDetails)
 
   return (
     <div className="flex flex-col h-full">

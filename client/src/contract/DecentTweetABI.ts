@@ -1,4 +1,4 @@
-export const DecentTweetContractAddress = "0x1dECc8b583Cd7da782b2D70CD341aCE7c003DEe3";
+export const DecentTweetContractAddress = "0x799bf78761ed2448b3f4c815a7c40ddc7aaf527e";
 
 export const DecentTweetAbi = [
   {

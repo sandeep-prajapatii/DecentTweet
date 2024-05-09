@@ -2,8 +2,6 @@ import Search from "../components/Search";
 import MessageLog from "../components/Messages/MessageLog";
 // import PersonalMessage from "../components/Messages/PersonalMessage";
 
-
-
 const Messages = () => {
   return (
     <div>
@@ -14,7 +12,12 @@ const Messages = () => {
         <Search />
       </div>
       <div className="flex flex-col gap-2">
-        <MessageLog username="sandy" timestamp="11 min ago" content="yea cool" address="0x98jh2f3783AC49c61159182f53452f20679338ED8" />
+        <MessageLog
+          username="sandy"
+          timestamp="11 min ago"
+          content="yea cool"
+          address="0x98jh2f3783AC49c61159182f53452f20679338ED8"
+        />
         {/* <MessageLog username="aman" timestamp="1 hour ago" content="text me when your project is completed" address="0x2k53453783AC49c61159182f2f20679338ED8" />
         <MessageLog username="rohan" timestamp="3 hour ago" content="thankyou shakti, i call you later" address="0x5f32345g783AC49c61159182f2f20679338ED8" />
         <MessageLog username="bhumi" timestamp="3 hour go" content="Please join the meeting asap" address="0x35533AC49c61159182f2f20679338ED8" />

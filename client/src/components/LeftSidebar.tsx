@@ -31,7 +31,7 @@ const LeftSidebar = () => {
 
   const links = [
     { to: "/", label: "Home", icon: home },
-    { to: "/messages", label: "Messages", icon: message },
+    // { to: "/messages", label: "Messages", icon: message },
     { to: "/bookmarks", label: "Bookmarks", icon: bookmarkWhite },
     { to: `/profile/${userAddress}`, label: "Profile", icon: profile },
   ];

@@ -10,8 +10,10 @@ import {
   DecentTweetAbi as abi,
   DecentTweetContractAddress as address,
 } from "../contract/DecentTweetABI";
+import { useNavigate } from "react-router-dom";
 
 const TopUsers = ({ user }: TopUsersType) => {
+  const navigate = useNavigate();
   const [currentUserDetails, setCurrentUserDetails] = useState<UserDetailsType>(
     UserDetailsDefaultValues
   );
@@ -59,7 +61,10 @@ const TopUsers = ({ user }: TopUsersType) => {
   }, [contractData]);
   return (
     <div className="flex items-center justify-between border-2 border-neutral-700 rounded-md gap-2 p-2 ">
-      <div className="flex gap-2">
+      <div
+        onClick={() => navigate(`/profile/${user.userAddress}`)}
+        className="flex gap-2"
+      >
         <div>
           <GenerateAvatar userAddress={String(user.userAddress)} size={40} />
         </div>

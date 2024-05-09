@@ -2,7 +2,6 @@ import CreateTweet from "../components/CreateTweet";
 import ForYouFeed from "../components/Feed/ForYouFeed";
 import FollowingFeed from "../components/Feed/FollowingFeed";
 import { useState } from "react";
-import CommentModal from "../components/Modals/CommentModal";
 
 const Home = () => {
   const [selectedTab, setSelectedTab] = useState("foryou");

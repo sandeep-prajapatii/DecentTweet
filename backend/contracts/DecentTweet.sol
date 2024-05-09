@@ -1,139 +1,349 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract DecentTweet {
+contract DecentralizedTwitter {
+    // Enum to represent the type of a tweet
+    enum TweetType {
+        Tweet,
+        Reply,
+        Retweet,
+        Quote
+    }
+
+    // Struct to represent a tweet
     struct Tweet {
-        address author;
-        string text;
-        uint256 timestamp;
+        TweetType tweetType; // Indicates the type of the tweet
+        uint256 tweetIndex; // Unique index of the tweet
+        uint256 timestamp; // Timestamp of the tweet
+        address authorAddress; // Address of the tweet author
+        string authorName; // Name of the tweet author
+        string tweetMsg; // Content of the tweet
+        uint256 quotedTweetIndex; // Index of the quoted tweet (if this is a quote)
+        address[] likedBy; // Addresses of users who liked this tweet
+        uint256[] replies; // Indices of replies to this tweet
+        uint256[] retweets; // Indices of retweets of this tweet
+        uint256[] quotes; // Indices of quotes of this tweet
+        address[] bookmarks; // Addresses of users who bookmarked this tweet
+        uint256 repliedTweetIndex; // Index of the tweet this tweet is a reply to
     }
 
+    // Struct to represent a user
     struct User {
-        address userAddress;
-        string name;
-        string profilePictureIPFS;
-        Tweet[] tweets;
-        address[] followers;
-        address[] following;
-        uint256 numFollowers;
-        uint256 numFollowing;
-        mapping(address => bool) isFollowing;
-        uint256[] bookmarks;
-        mapping(address => bool) approvedLogInAddresses;
+        address userAddress; // Address of the user
+        string userName; // Name of the user
+        string userBio; // Bio of the user
+        uint256[] bookmarks; // Indices of bookmarked tweets
+        uint256[] posts; // Indices of tweets posted by the user
+        uint256[] likes; // Indices of tweets liked by the user
+        uint256[] replies; // Indices of reply tweets posted by the user
+        address[] followers; // Addresses of the user's followers
+        address[] following; // Addresses of users the user is following
     }
 
-    mapping(address => User) public users;
-    Tweet[] public allTweets;
+    // Arrays to store tweets and users
+    Tweet[] public tweets;
+    User[] public users;
 
-    function createTweet(string memory _text) public {
-        Tweet memory newTweet = Tweet(msg.sender, _text, block.timestamp);
-        users[msg.sender].tweets.push(newTweet);
-        allTweets.push(newTweet);
+    // Function to create a new tweet
+    function createTweet(string memory _tweetMsg) public {
+        uint256 tweetIndex = tweets.length;
+        uint256 timestamp = block.timestamp;
+        address author = msg.sender;
+
+        Tweet storage newTweet = tweets.push();
+        newTweet.tweetIndex = tweetIndex;
+        newTweet.timestamp = timestamp;
+        newTweet.authorAddress = author;
+        newTweet.tweetMsg = _tweetMsg;
+        newTweet.tweetType = TweetType.Tweet;
+
+        // Update the user's post history
+        updateUserPostHistory(author, tweetIndex);
     }
 
-    function getAllTweets() public view returns (Tweet[] memory) {
-        return allTweets;
+    // Function to quote an existing tweet
+    function quoteTweet(uint256 _tweetIndex, string memory _tweetMsg) public {
+        Tweet storage originalTweet = tweets[_tweetIndex];
+        uint256 newTweetIndex = tweets.length;
+        uint256 timestamp = block.timestamp;
+        address author = msg.sender;
+
+        Tweet storage newTweet = tweets.push();
+        newTweet.tweetIndex = newTweetIndex;
+        newTweet.timestamp = timestamp;
+        newTweet.authorAddress = author;
+        newTweet.tweetMsg = _tweetMsg;
+        newTweet.tweetType = TweetType.Quote;
+        newTweet.quotedTweetIndex = _tweetIndex;
+        originalTweet.quotes.push(newTweetIndex);
+
+        // Update the user's post history
+        updateUserPostHistory(author, newTweetIndex);
     }
 
-    function getUserTweets() public view returns (Tweet[] memory) {
-        return users[msg.sender].tweets;
+    // Function to retweet an existing tweet
+    function retweet(uint256 _tweetIndex) public {
+        Tweet storage originalTweet = tweets[_tweetIndex];
+        uint256 newTweetIndex = tweets.length;
+        uint256 timestamp = block.timestamp;
+        address author = msg.sender;
+
+        Tweet storage newTweet = tweets.push();
+        newTweet.tweetIndex = newTweetIndex;
+        newTweet.timestamp = timestamp;
+        newTweet.authorAddress = author;
+        newTweet.tweetMsg = originalTweet.tweetMsg;
+        newTweet.tweetType = TweetType.Retweet;
+        newTweet.quotedTweetIndex = _tweetIndex;
+        originalTweet.retweets.push(newTweetIndex);
+
+        // Update the user's post history
+        updateUserPostHistory(author, newTweetIndex);
     }
 
-    function follow(address _user) public {
-        require(_user != msg.sender, "You can't follow yourself");
-        require(!users[msg.sender].isFollowing[_user], "You are already following this user");
-        users[msg.sender].following.push(_user);
-        users[msg.sender].numFollowing++;
-        users[_user].followers.push(msg.sender);
-        users[_user].numFollowers++;
-        users[msg.sender].isFollowing[_user] = true;
+    // Function to like a tweet
+    function likeTweet(uint256 _tweetIndex) public {
+        Tweet storage tweet = tweets[_tweetIndex];
+        tweet.likedBy.push(msg.sender);
+
+        // Update the user's like history
+        updateUserLikeHistory(msg.sender, _tweetIndex);
     }
 
-    function unfollow(address _user) public {
-        require(users[msg.sender].isFollowing[_user], "You are not following this user");
-        for (uint256 i = 0; i < users[msg.sender].following.length; i++) {
-            if (users[msg.sender].following[i] == _user) {
-                users[msg.sender].following[i] = users[msg.sender].following[users[msg.sender].following.length - 1];
-                users[msg.sender].following.pop();
-                users[msg.sender].numFollowing--;
-                break;
-            }
-        }
-        for (uint256 i = 0; i < users[_user].followers.length; i++) {
-            if (users[_user].followers[i] == msg.sender) {
-                users[_user].followers[i] = users[_user].followers[users[_user].followers.length - 1];
-                users[_user].followers.pop();
-                users[_user].numFollowers--;
-                break;
-            }
-        }
-        users[msg.sender].isFollowing[_user] = false;
+    // Function to dislike a tweet
+    function dislikeTweet(uint256 _tweetIndex) public {
+        Tweet storage tweet = tweets[_tweetIndex];
+        removeFromArray(tweet.likedBy, msg.sender);
+
+        // Update the user's like history
+        updateUserDislikeHistory(msg.sender, _tweetIndex);
     }
 
-    function getFollowers(address _user) public view returns (address[] memory) {
-        return users[_user].followers;
+    // Function to reply to a tweet
+    function replyToTweet(uint256 _tweetIndex, string memory _replyMsg) public {
+        Tweet storage originalTweet = tweets[_tweetIndex];
+        uint256 newTweetIndex = tweets.length;
+        uint256 timestamp = block.timestamp;
+        address author = msg.sender;
+
+        Tweet storage newTweet = tweets.push();
+        newTweet.tweetIndex = newTweetIndex;
+        newTweet.timestamp = timestamp;
+        newTweet.authorAddress = author;
+        newTweet.tweetMsg = _replyMsg;
+        newTweet.tweetType = TweetType.Reply;
+        newTweet.quotedTweetIndex = _tweetIndex;
+        newTweet.repliedTweetIndex = _tweetIndex;
+        originalTweet.replies.push(newTweetIndex);
+
+        // Update the user's reply history
+        updateUserReplyHistory(author, newTweetIndex);
     }
 
-    function getFollowing(address _user) public view returns (address[] memory) {
-        return users[_user].following;
+    // Function to bookmark a tweet
+    function bookmarkTweet(uint256 _tweetIndex) public {
+        // Find the user with the given address
+        User storage user = getUserByAddress(msg.sender);
+        user.bookmarks.push(_tweetIndex);
+
+        // Add the user's address to the tweet's bookmarks
+        tweets[_tweetIndex].bookmarks.push(msg.sender);
     }
 
-    function setProfilePicture(string memory _ipfsLink) public {
-        users[msg.sender].profilePictureIPFS = _ipfsLink;
+    // Function to unbookmark a tweet
+    function unbookmarkTweet(uint256 _tweetIndex) public {
+        // Find the user with the given address
+        User storage user = getUserByAddress(msg.sender);
+
+        // Remove the tweet index from the user's bookmarks array
+        removeFromUint256Array(user.bookmarks, _tweetIndex);
+
+        // Remove the user's address from the tweet's bookmarks array
+        removeFromArray(tweets[_tweetIndex].bookmarks, msg.sender);
     }
 
-    function setUserName(string memory _name) public {
-        users[msg.sender].name = _name;
+    // Function to follow a user
+    function followUser(address _userAddress) public {
+        // Find the user with the given address
+        User storage follower = getUserByAddress(msg.sender);
+        User storage followee = getUserByAddress(_userAddress);
+
+        // Add the follower to the followee's followers array
+        followee.followers.push(follower.userAddress);
+
+        // Add the followee to the follower's following array
+        follower.following.push(_userAddress);
     }
 
-    function addBookmark(uint256 _tweetIndex) public {
-        users[msg.sender].bookmarks.push(_tweetIndex);
+    // Function to unfollow a user
+    function unfollowUser(address _userAddress) public {
+        // Find the user with the given address
+        User storage follower = getUserByAddress(msg.sender);
+        User storage followee = getUserByAddress(_userAddress);
+
+        // Remove the follower from the followee's followers array
+        removeFromArray(followee.followers, follower.userAddress);
+
+        // Remove the followee from the follower's following array
+        removeFromArray(follower.following, _userAddress);
     }
 
-    function removeBookmark(uint256 _bookmarkIndex) public {
-        require(_bookmarkIndex < users[msg.sender].bookmarks.length, "Invalid bookmark index");
-        users[msg.sender].bookmarks[_bookmarkIndex] = users[msg.sender].bookmarks[users[msg.sender].bookmarks.length - 1];
-        users[msg.sender].bookmarks.pop();
-    }
-
-    function getTopTenUsers() public view returns (address[] memory) {
-        address[] memory topUsers = new address[](10);
-        uint256[] memory followerCounts = new uint256[](10);
-
-        for (uint256 i = 0; i < 10; i++) {
-            topUsers[i] = address(0);
-            followerCounts[i] = 0;
-        }
-
-        for (uint256 i = 0; i < allTweets.length; i++) {
-            address author = allTweets[i].author;
-            uint256 numFollowers = users[author].numFollowers;
-
-            for (uint256 j = 0; j < 10; j++) {
-                if (numFollowers > followerCounts[j]) {
-                    for (uint256 k = 9; k > j; k--) {
-                        topUsers[k] = topUsers[k - 1];
-                        followerCounts[k] = followerCounts[k - 1];
-                    }
-                    topUsers[j] = author;
-                    followerCounts[j] = numFollowers;
-                    break;
+    // Function to get the top users by number of followers
+    function getTopUsers(uint256 _count) public view returns (User[] memory) {
+        // Sort the users array by the number of followers in descending order
+        User[] memory sortedUsers = users;
+        for (uint256 i = 0; i < sortedUsers.length - 1; i++) {
+            for (uint256 j = 0; j < sortedUsers.length - i - 1; j++) {
+                if (sortedUsers[j].followers.length < sortedUsers[j + 1].followers.length) {
+                    // Swap the users
+                    User memory temp = sortedUsers[j];
+                    sortedUsers[j] = sortedUsers[j + 1];
+                    sortedUsers[j + 1] = temp;
                 }
             }
         }
 
+        // Return the top _count users
+        User[] memory topUsers = new User[](_count);
+        for (uint256 i = 0; i < _count; i++) {
+            topUsers[i] = sortedUsers[i];
+        }
         return topUsers;
     }
 
-    function approveLogInAddress(address _address) public {
-        users[msg.sender].approvedLogInAddresses[_address] = true;
+    // Function to get the followers of a user
+    function getFollowers(address _userAddress) public  returns (address[] memory) {
+        // Find the user with the given address
+        User storage user = getUserByAddress(_userAddress);
+        return user.followers;
     }
 
-    function disapproveLogInAddress(address _address) public {
-        users[msg.sender].approvedLogInAddresses[_address] = false;
+    // Function to get the users a user is following
+    function getFollowing(address _userAddress) public  returns (address[] memory) {
+        // Find the user with the given address
+        User storage user = getUserByAddress(_userAddress);
+        return user.following;
     }
 
-    function canLogIn(address _address) public view returns (bool) {
-        return users[msg.sender].approvedLogInAddresses[_address];
+    // Function to update a user's profile
+    function updateUserProfile(string memory _userName, string memory _userBio) public {
+        // Find the user with the given address
+        User storage user = getUserByAddress(msg.sender);
+        user.userName = _userName;
+        user.userBio = _userBio;
+    }
+
+    // Function to get all tweets
+    function getAllTweets() public view returns (Tweet[] memory) {
+        return tweets;
+    }
+
+    function getTweetsFromFollowing(address _user) public  returns (Tweet[] memory) {
+    // Get the current user
+    User storage currentUser = getUserByAddress(_user);
+
+    // Create a dynamic array to store the tweets
+    Tweet[] memory tweetsList = new Tweet[](0);
+
+    // Iterate through the users the current user is following
+    for (uint256 i = 0; i < currentUser.following.length; i++) {
+        address followedUserAddress = currentUser.following[i];
+        User storage followedUser = getUserByAddress(followedUserAddress);
+
+        // Iterate through the tweets posted by the followed user
+        for (uint256 j = 0; j < followedUser.posts.length; j++) {
+            uint256 tweetIndex = followedUser.posts[j];
+            tweetsList[tweetsList.length] = tweets[tweetIndex];
+        }
+    }
+
+    return tweetsList;
+}
+
+    // Function to get a tweet by its index
+    function getTweetByIndex(uint256 _tweetIndex) public view returns (Tweet memory) {
+        require(_tweetIndex < tweets.length, "Invalid tweet index");
+        return tweets[_tweetIndex];
+    }
+
+    // Function to get tweets by indices
+    function getTweetsByIndices(uint256[] memory _tweetIndices) public view returns (Tweet[] memory) {
+    Tweet[] memory selectedTweets = new Tweet[](_tweetIndices.length);
+    for (uint256 i = 0; i < _tweetIndices.length; i++) {
+        selectedTweets[i] = tweets[_tweetIndices[i]];
+    }
+    return selectedTweets;
+    }
+
+    // Function to get the user details
+    function getUserDetails(address _userAddress) public  returns (User memory) {
+        // Find the user with the given address
+        User storage user = getUserByAddress(_userAddress);
+        return user;
+    }
+
+    // Public function to get user details
+    function getPublicUserDetails(address _userAddress) public  returns (User memory) {
+        User memory user = getUserDetails(_userAddress);
+        return user;
+    }
+
+    // Helper function to update the user's post history
+    function updateUserPostHistory(address _userAddress, uint256 _tweetIndex) private {
+        User storage user = getUserByAddress(_userAddress);
+        user.posts.push(_tweetIndex);
+    }
+
+    // Helper function to update the user's like history
+    function updateUserLikeHistory(address _userAddress, uint256 _tweetIndex) private {
+        User storage user = getUserByAddress(_userAddress);
+        user.likes.push(_tweetIndex);
+    }
+
+    // Helper function to update the user's reply history
+    function updateUserReplyHistory(address _userAddress, uint256 _tweetIndex) private {
+        User storage user = getUserByAddress(_userAddress);
+        user.replies.push(_tweetIndex);
+    }
+
+    // Helper function to update the user's dislike history
+    function updateUserDislikeHistory(address _userAddress, uint256 _tweetIndex) private {
+        User storage user = getUserByAddress(_userAddress);
+        removeFromUint256Array(user.likes, _tweetIndex);
+    }
+
+    // Helper function to get a user by their address
+    function getUserByAddress(address _userAddress) private  returns (User storage) {
+        for (uint256 i = 0; i < users.length; i++) {
+            if (users[i].userAddress == _userAddress) {
+                return users[i];
+            }
+        }
+        // If the user is not found, create a new user
+        User storage newUser = users.push();
+        newUser.userAddress = _userAddress;
+        return newUser;
+    }
+
+    // Helper function to remove an element from an array
+    function removeFromArray(address[] storage _array, address _element) private {
+        for (uint256 i = 0; i < _array.length; i++) {
+            if (_array[i] == _element) {
+                _array[i] = _array[_array.length - 1];
+                _array.pop();
+                return;
+            }
+        }
+    }
+
+    // Helper function to remove an element from a uint256 array
+    function removeFromUint256Array(uint256[] storage _array, uint256 _element) private {
+        for (uint256 i = 0; i < _array.length; i++) {
+            if (_array[i] == _element) {
+                _array[i] = _array[_array.length - 1];
+                _array.pop();
+                return;
+            }
+        }
     }
 }
